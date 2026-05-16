@@ -1,23 +1,74 @@
-import { Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Card from "../../components/ui/Card";
+import { Text, View } from "react-native";
+
+import Screen from "@/components/ui/Screen";
+import { COLORS } from "@/constants/theme";
 
 export default function Profile() {
   return (
-    <SafeAreaView style={{flex: 1, paddingHorizontal: 20, paddingTop: 10, backgroundColor: "#F6F7FB",}}>
-      <Text style={{ fontSize: 28, fontWeight: "700" }}>
+    <Screen>
+      <Text
+        style={{
+          color: COLORS.text,
+          fontSize: 34,
+          fontWeight: "700",
+          marginBottom: 30,
+        }}
+      >
         Profile
       </Text>
 
-      <Card>
-        <Text style={{ fontSize: 18 }}>Tristan</Text>
-        <Text style={{ color: "gray" }}>Informatik Student</Text>
-      </Card>
+      <View
+        style={{
+          backgroundColor: COLORS.card,
+          padding: 24,
+          borderRadius: 28,
+          marginBottom: 20,
+        }}
+      >
+        <Text
+          style={{
+            color: COLORS.text,
+            fontSize: 22,
+            fontWeight: "700",
+          }}
+        >
+          Tristan
+        </Text>
 
-      <Card>
-        <Text>🔥 Streak: 5 days</Text>
-        <Text>⭐ Matches: 12</Text>
-      </Card>
-    </SafeAreaView>
+        <Text
+          style={{
+            color: COLORS.subtext,
+            marginTop: 8,
+          }}
+        >
+          Computer Science Student
+        </Text>
+      </View>
+
+      <View
+        style={{
+          backgroundColor: COLORS.card,
+          padding: 24,
+          borderRadius: 28,
+        }}
+      >
+        <Text
+          style={{
+            color: COLORS.text,
+            marginBottom: 10,
+          }}
+        >
+          🔥 5 Day Streak
+        </Text>
+
+        <Text
+          style={{
+            color: COLORS.text,
+          }}
+        >
+          ⭐ 12 Study Matches
+        </Text>
+      </View>
+    </Screen>
   );
 }

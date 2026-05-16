@@ -1,27 +1,76 @@
-import { Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Card from "../../components/ui/Card";
+import { Text, View } from "react-native";
+
+import Screen from "@/components/ui/Screen";
+import { COLORS } from "@/constants/theme";
 
 export default function Calendar() {
   return (
-    <SafeAreaView style={{flex: 1, paddingHorizontal: 20, paddingTop: 10, backgroundColor: "#F6F7FB",}}>
-      <Text style={{ fontSize: 28, fontWeight: "700" }}>
+    <Screen>
+      <Text
+        style={{
+          color: COLORS.text,
+          fontSize: 34,
+          fontWeight: "700",
+          marginBottom: 30,
+        }}
+      >
         Study Plan
       </Text>
 
-      <Card>
-        <Text>📅 Monday</Text>
-        <Text style={{ color: "gray" }}>
-          Algorithms mit Anna (14:00)
+      <View
+        style={{
+          backgroundColor: COLORS.card,
+          padding: 22,
+          borderRadius: 24,
+          marginBottom: 18,
+        }}
+      >
+        <Text
+          style={{
+            color: COLORS.text,
+            fontSize: 18,
+            fontWeight: "600",
+          }}
+        >
+          📚 Algorithms with Anna
         </Text>
-      </Card>
 
-      <Card>
-        <Text>📅 Wednesday</Text>
-        <Text style={{ color: "gray" }}>
-          Database Exam Prep
+        <Text
+          style={{
+            color: COLORS.subtext,
+            marginTop: 8,
+          }}
+        >
+          Monday • 14:00
         </Text>
-      </Card>
-    </SafeAreaView>
+      </View>
+
+      <View
+        style={{
+          backgroundColor: COLORS.card,
+          padding: 22,
+          borderRadius: 24,
+        }}
+      >
+        <Text
+          style={{
+            color: COLORS.text,
+            fontSize: 18,
+            fontWeight: "600",
+          }}
+        >
+          🧠 Database Exam Prep
+        </Text>
+
+        <Text
+          style={{
+            color: COLORS.subtext,
+            marginTop: 8,
+          }}
+        >
+          Wednesday • 10:00
+        </Text>
+      </View>
+    </Screen>
   );
 }

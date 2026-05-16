@@ -1,5 +1,7 @@
 import { Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+
+import Screen from "@/components/ui/Screen";
+import { COLORS } from "@/constants/theme";
 
 const messages = [
   { id: 1, text: "Hey, lernen wir morgen?", me: false },
@@ -9,30 +11,45 @@ const messages = [
 
 export default function Chat() {
   return (
-    <SafeAreaView style={{flex: 1, paddingHorizontal: 20, paddingTop: 10, backgroundColor: "#F6F7FB",}}>
-      <Text style={{ fontSize: 24, fontWeight: "700" }}>
+    <Screen>
+      <Text
+        style={{
+          color: COLORS.text,
+          fontSize: 34,
+          fontWeight: "700",
+          marginBottom: 30,
+        }}
+      >
         Chat
       </Text>
 
-      <View style={{ marginTop: 20 }}>
+      <View>
         {messages.map((m) => (
           <View
             key={m.id}
             style={{
               alignSelf: m.me ? "flex-end" : "flex-start",
-              backgroundColor: m.me ? "#111" : "white",
-              padding: 12,
-              borderRadius: 16,
-              marginBottom: 10,
+              backgroundColor: m.me
+                ? COLORS.primary
+                : COLORS.card,
+
+              padding: 16,
+              borderRadius: 20,
+              marginBottom: 14,
               maxWidth: "80%",
             }}
           >
-            <Text style={{ color: m.me ? "white" : "black" }}>
+            <Text
+              style={{
+                color: COLORS.text,
+                fontSize: 15,
+              }}
+            >
               {m.text}
             </Text>
           </View>
         ))}
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 }

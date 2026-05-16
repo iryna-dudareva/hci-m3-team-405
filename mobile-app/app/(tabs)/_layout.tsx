@@ -1,19 +1,46 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
+import { COLORS } from "@/constants/theme";
+
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+
+        tabBarShowLabel: false,
+
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 20,
+          left: 20,
+          right: 20,
+
+          backgroundColor: "#181C24",
+
+          borderRadius: 24,
+
+          height: 75,
+
+          borderTopWidth: 0,
+
+          elevation: 0,
+
+          shadowColor: "#000",
+          shadowOpacity: 0.25,
+          shadowRadius: 20,
+        },
+
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: "#7B8190",
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+            <Ionicons name="home" size={28} color={color} />
           ),
         }}
       />
@@ -21,9 +48,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="match"
         options={{
-          title: "Match",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="people" size={size} color={color} />
+            <Ionicons name="people" size={28} color={color} />
           ),
         }}
       />
@@ -31,9 +57,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="chat"
         options={{
-          title: "Chat",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubbles" size={size} color={color} />
+            <Ionicons name="chatbubbles" size={28} color={color} />
           ),
         }}
       />
@@ -41,9 +66,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="calendar"
         options={{
-          title: "Plan",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
+            <Ionicons name="calendar" size={28} color={color} />
           ),
         }}
       />
@@ -51,9 +75,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+            <Ionicons name="person" size={28} color={color} />
           ),
         }}
       />
