@@ -2,18 +2,13 @@ import { User } from "@/types/user";
 
 //Mock-Data generiert mithilfe von Chatgpt
 /*
-Prompt:  based on these types: export interface User {
+Prompt:  based on these types: 
+export interface User {
     id: string;
-    firstName: string;
-    lastName: string;
-    subjects: string[];
-    availability: string[];
-    bio?: string;
-},  export interface Message{
-    id: string;
-    senderId: string;
-    text: string;
-    timestamp: string;
+    name: string;
+    subject: string;
+    semester: string;
+    image: string;
 }
 
 
@@ -21,7 +16,8 @@ export interface Chat {
     id: string;
     participants: string[];
     messages: Message[];
-}, export interface Calendar{
+}, 
+export interface Calendar{
     id: string;
     title: string;
     date: string;
@@ -34,42 +30,37 @@ export interface Chat {
 export const mockUsers: User[] = [
   {
     id: "1",
-    firstName: "Anna",
-    lastName: "Müller",
-    subjects: ["React", "UX Design"],
-    availability: ["Monday", "Wednesday"],
-    bio: "Ich helfe gerne bei Frontend und UI Themen.",
+    name: "Sophia",
+    subject: "Computer Science",
+    semester: "4th Semester",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
   },
   {
     id: "2",
-    firstName: "Max",
-    lastName: "Schmidt",
-    subjects: ["Mathematik", "Statistik"],
-    availability: ["Tuesday", "Thursday"],
-    bio: "Mathe Buddy für Prüfungen.",
+    name: "Daniel",
+    subject: "Data Science",
+    semester: "2nd Semester",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
   },
   {
     id: "3",
-    firstName: "Lea",
-    lastName: "Klein",
-    subjects: ["JavaScript", "TypeScript"],
-    availability: ["Friday"],
-    bio: "Lerne gern gemeinsam und erkläre Basics.",
+    name: "Emma",
+    subject: "Physics",
+    semester: "6th Semester",
+    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9",
   },
   {
     id: "4",
-    firstName: "Jonas",
-    lastName: "Weber",
-    subjects: ["Databases", "SQL"],
-    availability: ["Monday", "Friday"],
-    bio: "SQL und Datenbanken sind mein Ding.",
+    name: "Lukas",
+    subject: "Mathematics",
+    semester: "3rd Semester",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
   },
   {
     id: "5",
-    firstName: "Sara",
-    lastName: "Hoffmann",
-    subjects: ["UI Design", "Figma"],
-    availability: ["Wednesday", "Thursday"],
-    bio: "Design + UX Unterstützung.",
+    name: "Mia",
+    subject: "UX Design",
+    semester: "5th Semester",
+    image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1",
   },
 ];
