@@ -1,30 +1,53 @@
-import { Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Card from "../../components/ui/Card";
-import { users } from "../../data/mock";
+import { StyleSheet, Text, View } from 'react-native';
 
-export default function Home() {
+import Screen from '@/components/ui/Screen';
+import XPBar from '@/components/XPBar';
+
+import { COLORS } from '@/constants/theme';
+
+export default function HomeScreen() {
   return (
-    <SafeAreaView style={{flex: 1, paddingHorizontal: 20, paddingTop: 10, backgroundColor: "#F6F7FB",}}>
-      <Text style={{ fontSize: 28, fontWeight: "700" }}>
-        Your Buddies
-      </Text>
+    <Screen>
+      <Text style={styles.title}>Welcome back Tristan 👋</Text>
 
-      <Text style={{ color: "gray", marginBottom: 20 }}>
-        Find people to study with
-      </Text>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Daily Progress</Text>
+        <XPBar />
+      </View>
 
-      {users.map((u) => (
-        <Card key={u.id}>
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>
-            {u.name}
-          </Text>
-
-          <Text style={{ color: "gray" }}>
-            {u.study}
-          </Text>
-        </Card>
-      ))}
-    </SafeAreaView>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Today's Goal</Text>
+        <Text style={styles.goal}>Complete 2 Study Sessions</Text>
+      </View>
+    </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  title: {
+    color: COLORS.text,
+    fontSize: 32,
+    fontWeight: '700',
+    marginTop: 10,
+    marginBottom: 24,
+  },
+
+  card: {
+    backgroundColor: COLORS.card,
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 20,
+  },
+
+  cardTitle: {
+    color: COLORS.text,
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 14,
+  },
+
+  goal: {
+    color: COLORS.subtext,
+    fontSize: 16,
+  },
+});
