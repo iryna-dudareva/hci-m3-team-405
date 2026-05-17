@@ -8,5 +8,5 @@ export interface User {
     location: string;
     studyStyle: string;
     availability: string;
-    languages: string[];
+    languages: string;
 }
