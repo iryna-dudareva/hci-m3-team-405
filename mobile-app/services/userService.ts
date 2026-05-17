@@ -1,5 +1,10 @@
-import { mockUsers } from "@/data/mockUsers";
+import { users } from "@/data/users";
+import { User } from "@/types/user";
 
-export const getUsers = async () => {
-    return mockUsers; //to be replaced with return await axios.get ("/users"); (mongodb backend)
+export const getUsers =  (): User[] => {
+    return users;
+};
+
+export const getMatchCount = (): number => {
+    return users.length;
 };

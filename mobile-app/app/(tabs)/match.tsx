@@ -6,7 +6,7 @@ import Swiper from "react-native-deck-swiper";
 import MatchCard from "@/components/MatchCard";
 import Screen from "@/components/ui/Screen";
 
-import { users } from "@/data/mock";
+import { users } from "@/data/users";
 
 type MatchUser = {
   id: number;
@@ -107,7 +107,7 @@ export default function MatchScreen() {
           <View style={styles.endContainer}>
             <Text style={styles.endTitle}>All profiles reviewed!</Text>
             <Text style={styles.endSubtitle}>
-              You've gone through all available study buddies. Check back later
+              You`&apos;`ve gone through all available study buddies. Check back later
               for new profiles or reach out to your matches.
             </Text>
             {matchedUsers.length > 0 ? (
