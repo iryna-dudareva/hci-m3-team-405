@@ -25,6 +25,7 @@ export default function Chat() {
     me: boolean
   };
 
+
   const [messages, setMessages] = useState<Message[]>([
     { id: 1, text: "Hey, lernen wir morgen?", me: false },
     { id: 2, text: "Ja passt!", me: true },

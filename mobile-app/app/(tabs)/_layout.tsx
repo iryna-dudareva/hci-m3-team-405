@@ -6,6 +6,7 @@ import { COLORS } from "@/constants/theme";
 export default function TabLayout() {
   return (
     <Tabs
+      initialRouteName="home"
       screenOptions={{
         headerShown: false,
 
@@ -14,22 +15,24 @@ export default function TabLayout() {
         tabBarStyle: {
           position: "absolute",
           bottom: 20,
-          left: 20,
-          right: 20,
-
+          left: 24,
+          right: 24,
           backgroundColor: "#181C24",
-
           borderRadius: 24,
-
           height: 75,
-
+          alignItems: "center",
+          justifyContent: "center",
           borderTopWidth: 0,
-
           elevation: 0,
-
           shadowColor: "#000",
           shadowOpacity: 0.25,
           shadowRadius: 20,
+        },
+
+        tabBarItemStyle: {
+          alignItems: "center",
+          justifyContent: "center",
+          paddingTop: 8,
         },
 
         tabBarActiveTintColor: COLORS.primary,
