@@ -21,20 +21,37 @@ export default function Chat() {
     { id: 2, text: "Ja passt!", me: true },
     { id: 3, text: "Welche Uhrzeit?", me: false },
   ]);
-
+  
+  const botReplies = [
+    "Alright",
+    "For sure",
+    "If you want, yes",
+    "Sounds good",
+    "Ja passt",
+    "Cool",
+  ];
+  const getRandomReply = () => {
+    return botReplies[Math.floor(Math.random() * botReplies.length)];
+  };
   const sendMessage = () => {
     if (!message.trim()) return;
 
-    setMessages([
-      ...messages,
-      {
-        id: Date.now(),
-        text: message,
-        me: true,
-      },
-    ]);
-
+    const newMsg = {
+      id: Date.now(),
+      text: message,
+      me: true,
+    };
+    setMessages((prev) => [...prev, newMsg]);
     setMessage("");
+
+    setTimeout(() =>{
+      const reply = {
+        id: Date.now() + 1,
+        text: getRandomReply(),
+        me: false,
+      };
+      setMessages((prev) => [...prev, reply]);
+    }, 800)
   };
 
   return (
@@ -85,6 +102,7 @@ export default function Chat() {
             flexDirection: "row",
             gap: 10,
             paddingVertical: 10,
+            paddingBottom: 30,
           }}
         >
           <TextInput
@@ -98,7 +116,7 @@ export default function Chat() {
               color: COLORS.text,
               padding: 14,
               borderRadius: 16,
-              marginBottom: 35
+             
             }}
           />
   
@@ -109,7 +127,7 @@ export default function Chat() {
               justifyContent: "center",
               paddingHorizontal: 20,
               borderRadius: 16,
-              marginBottom: 40
+              
             }}
           >
             <Text style={{ color: "white" }}>Send</Text>
