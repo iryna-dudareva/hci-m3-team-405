@@ -27,10 +27,12 @@ export default function MatchScreen() {
   const router = useRouter();
   const [matchedUsers, setMatchedUsers] = useState<MatchUser[]>([]);
   const [showMatches, setShowMatches] = useState(true);
+  const [swiped, setSwiped] = useState(0);
 
   const storeMatch = (cardIndex: number) => {
     const newMatch = users[cardIndex];
     if (!newMatch) return;
+    setSwiped((prev) => prev + 1);
     setMatchedUsers((current) =>
       current.some((user) => user.id === newMatch.id)
         ? current
@@ -50,9 +52,21 @@ export default function MatchScreen() {
       <>
         <Text style={styles.title}>Find your Study Buddy</Text>
         {!(matchedUsers.length > 0 && showMatches) ? (
-          <Text style={styles.subtitle}>
-            Your matches appear here and you can start a chat directly.
-          </Text>
+          <View style={styles.headerSection}>
+            <Text style={styles.subtitle}>
+              Your matches appear here and you can start a chat directly.
+            </Text>
+            {matchedUsers.length > 0 && !showMatches ? (
+              <Pressable
+                style={styles.viewMatchesButton}
+                onPress={() => setShowMatches(true)}
+              >
+                <Text style={styles.viewMatchesButtonText}>
+                  View Matches ({matchedUsers.length})
+                </Text>
+              </Pressable>
+            ) : null}
+          </View>
         ) : null}
 
         {matchedUsers.length > 0 && showMatches ? (
@@ -89,84 +103,106 @@ export default function MatchScreen() {
           </Text>
         ) : null}
 
-        <View style={styles.container}>
-          <Swiper
-            cards={users}
-            renderCard={(card) => (card ? <MatchCard user={card} /> : <View />)}
-            onSwipedRight={storeMatch}
-            stackSize={1}
-            backgroundColor="transparent"
-            animateCardOpacity
-            animateOverlayLabelsOpacity
-            disableBottomSwipe
-            disableTopSwipe
-            verticalSwipe={false}
-            cardVerticalMargin={0}
-            cardHorizontalMargin={0}
-            outputRotationRange={["-8deg", "0deg", "8deg"]}
+        {swiped >= users.length ? (
+          <View style={styles.endContainer}>
+            <Text style={styles.endTitle}>All profiles reviewed!</Text>
+            <Text style={styles.endSubtitle}>
+              You've gone through all available study buddies. Check back later
+              for new profiles or reach out to your matches.
+            </Text>
+            {matchedUsers.length > 0 ? (
+              <Pressable
+                style={styles.viewMatchesButtonLarge}
+                onPress={() => setShowMatches(true)}
+              >
+                <Text style={styles.viewMatchesButtonLargeText}>
+                  View All Matches
+                </Text>
+              </Pressable>
+            ) : null}
+          </View>
+        ) : null}
 
-            overlayLabels={{
-              left: {
-                title: "PASS",
-                style: {
-                  label: {
-                    backgroundColor: "#FF4D67",
-                    color: "white",
-                    fontSize: 30,
-                    fontWeight: "700",
-                    paddingHorizontal: 22,
-                    paddingVertical: 12,
-                    borderRadius: 18,
-                    overflow: "hidden",
-                  },
-                  wrapper: {
-                    flexDirection: "column",
-                    alignItems: "flex-end",
-                    justifyContent: "flex-start",
-                    marginTop: 60,
-                    marginLeft: -35,
+        {swiped < users.length ? (
+          <View style={styles.container}>
+            <Swiper
+              cards={users}
+              renderCard={(card) => (card ? <MatchCard user={card} /> : <View />)}
+              onSwipedRight={storeMatch}
+              stackSize={1}
+              backgroundColor="transparent"
+              animateCardOpacity
+              animateOverlayLabelsOpacity
+              disableBottomSwipe
+              disableTopSwipe
+              verticalSwipe={false}
+              cardVerticalMargin={0}
+              cardHorizontalMargin={0}
+              outputRotationRange={["-8deg", "0deg", "8deg"]}
+
+              overlayLabels={{
+                left: {
+                  title: "PASS",
+                  style: {
+                    label: {
+                      backgroundColor: "#FF4D67",
+                      color: "white",
+                      fontSize: 30,
+                      fontWeight: "700",
+                      paddingHorizontal: 22,
+                      paddingVertical: 12,
+                      borderRadius: 18,
+                      overflow: "hidden",
+                    },
+                    wrapper: {
+                      flexDirection: "column",
+                      alignItems: "flex-end",
+                      justifyContent: "flex-start",
+                      marginTop: 60,
+                      marginLeft: -35,
+                    },
                   },
                 },
-              },
 
-              right: {
-                title: "MATCH",
-                style: {
-                  label: {
-                    backgroundColor: "#4CD964",
-                    color: "white",
-                    fontSize: 30,
-                    fontWeight: "700",
-                    paddingHorizontal: 22,
-                    paddingVertical: 12,
-                    borderRadius: 18,
-                    overflow: "hidden",
-                  },
-                  wrapper: {
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    justifyContent: "flex-start",
-                    marginTop: 60,
-                    marginLeft: 35,
+                right: {
+                  title: "MATCH",
+                  style: {
+                    label: {
+                      backgroundColor: "#4CD964",
+                      color: "white",
+                      fontSize: 30,
+                      fontWeight: "700",
+                      paddingHorizontal: 22,
+                      paddingVertical: 12,
+                      borderRadius: 18,
+                      overflow: "hidden",
+                    },
+                    wrapper: {
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      justifyContent: "flex-start",
+                      marginTop: 60,
+                      marginLeft: 35,
+                    },
                   },
                 },
-              },
-            }}
+              }}
 
-            containerStyle={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+              containerStyle={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
 
-            cardStyle={{
-              width: width * 0.92,
-              height: height * 0.72,
+              cardStyle={{
+                width: width * 0.92,
+                height: height * 0.72,
 
-              borderRadius: 32,
-            }}
-          />
-        </View>
+                borderRadius: 32,
+              }}
+            />
+          </View>
+        ) : null}
       </>
     </Screen>
   );
@@ -308,5 +344,62 @@ const styles = StyleSheet.create({
     color: "#6B7280",
     marginBottom: 14,
     fontSize: 14,
+  },
+
+  headerSection: {
+    width: "100%",
+    marginBottom: 16,
+  },
+
+  viewMatchesButton: {
+    marginTop: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    backgroundColor: "#3B82F6",
+    alignSelf: "flex-start",
+  },
+
+  viewMatchesButtonText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 14,
+  },
+
+  endContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingBottom: 40,
+  },
+
+  endTitle: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#111",
+    marginBottom: 12,
+    textAlign: "center",
+  },
+
+  endSubtitle: {
+    fontSize: 16,
+    color: "#6B7280",
+    textAlign: "center",
+    lineHeight: 24,
+    marginBottom: 28,
+  },
+
+  viewMatchesButtonLarge: {
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 18,
+    backgroundColor: "#3B82F6",
+  },
+
+  viewMatchesButtonLargeText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
   },
 });
