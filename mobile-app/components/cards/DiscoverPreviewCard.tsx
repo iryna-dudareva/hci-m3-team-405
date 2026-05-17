@@ -8,6 +8,7 @@ import {
 import { router } from 'expo-router';
 
 import { COLORS, SHADOWS } from '@/constants/theme';
+import { getMatchCount } from "@/services/userService";
 
 type Props = {
   count: number;

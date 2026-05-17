@@ -2,22 +2,11 @@ import { COLORS, SHADOWS } from "@/constants/theme";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { Dimensions, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { User } from "@/types/user";
 
-const { width, height } = Dimensions.get("window");
+/*const { width, height } = Dimensions.get("window");*/
 
-type User = {
-  id: number;
-  name: string;
-  subject: string;
-  bio: string;
-  image: string;
-  age: number;
-  location: string;
-  studyStyle: string;
-  availability: string; 
-  languages: string; 
-};
 
 export default function MatchCard({ user }: { user: User }) {
   const [expanded, setExpanded] = useState(false);
@@ -84,7 +73,7 @@ export default function MatchCard({ user }: { user: User }) {
               <View style={styles.infoRow}>
                 <Text style={styles.infoLabel}>🌍 Languages</Text>
                 <Text style={styles.extraText}>
-                  {user.languages}
+                  {user.languages.join(", ")}
                 </Text>
               </View>
             </View>

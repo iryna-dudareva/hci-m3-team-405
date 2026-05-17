@@ -2,11 +2,12 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { COLORS, SHADOWS } from '@/constants/theme';
 
+
 type Props = {
   title: string;
   time: string;
   participants: number;
-};
+}
 
 export default function SessionCard({
   title,

@@ -1,14 +1,17 @@
 import { ReactNode } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { COLORS } from "@/constants/theme";
 
-export default function Screen({
-  children,
-}: {
+type Props = {
   children: ReactNode;
-}) {
+  style?: ViewStyle;
+};
+
+export default function Screen({
+  children, style
+}: Props){
   return (
     <SafeAreaView style={styles.container}>
       {children}
