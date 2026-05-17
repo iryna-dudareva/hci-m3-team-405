@@ -1,15 +1,24 @@
+import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
 
 import Screen from "@/components/ui/Screen";
 import { COLORS } from "@/constants/theme";
 
-const messages = [
-  { id: 1, text: "Hey, lernen wir morgen?", me: false },
-  { id: 2, text: "Ja passt!", me: true },
-  { id: 3, text: "Welche Uhrzeit?", me: false },
-];
-
 export default function Chat() {
+  const params = useLocalSearchParams();
+  const name = Array.isArray(params.name) ? params.name[0] : params.name;
+  const chatTitle = name ? `Chat mit ${name}` : "Chat";
+
+  const messages = [
+    {
+      id: 1,
+      text: name ? `Hey ${name}, lernen wir morgen?` : "Hey, lernen wir morgen?",
+      me: false,
+    },
+    { id: 2, text: "Ja passt!", me: true },
+    { id: 3, text: "Welche Uhrzeit?", me: false },
+  ];
+
   return (
     <Screen>
       <Text
@@ -20,7 +29,7 @@ export default function Chat() {
           marginBottom: 30,
         }}
       >
-        Chat
+        {chatTitle}
       </Text>
 
       <View>
