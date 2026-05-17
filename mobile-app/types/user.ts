@@ -1,12 +1,7 @@
 export interface User {
-    id: number;
+    id: string;
     name: string;
     subject: string;
-    bio: string;
+    semester: string;
     image: string;
-    age: number;
-    location: string;
-    studyStyle: string;
-    availability: string;
-    languages: string;
 }

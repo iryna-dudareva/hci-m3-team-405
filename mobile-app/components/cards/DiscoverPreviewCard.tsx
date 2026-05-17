@@ -10,35 +10,28 @@ import { router } from 'expo-router';
 import { COLORS, SHADOWS } from '@/constants/theme';
 import { getMatchCount } from "@/services/userService";
 
-type Props = {
-  count: number;
-};
-
-export default function DiscoverPreviewCard({count}: Props) {
-  const studentText = count === 1 ? 'student' : 'students';
-  const matchText = count === 1 ? 'matches' : 'match';
-
+export default function DiscoverPreviewCard() {
   return (
-      <View style={styles.card}>
-        <Text style={styles.title}>
-          New Study Matches
-        </Text>
+    <View style={styles.card}>
+      <Text style={styles.title}>
+        New Study Matches
+      </Text>
 
-        <Text style={styles.subtitle}>
-          {count} {studentText} {matchText} your interests
-          and study goals.
-        </Text>
+      <Text style={styles.subtitle}>
+        12 students match your interests
+        and study goals.
+      </Text>
 
-        <TouchableOpacity
-            style={styles.button}
-            activeOpacity={0.8}
-            onPress={() => router.push('/match')}
-        >
-          <Text style={styles.buttonText}>
-            Explore Matches
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.button}
+        activeOpacity={0.8}
+        onPress={() => router.push('/match')}
+      >
+        <Text style={styles.buttonText}>
+          Explore Matches
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
