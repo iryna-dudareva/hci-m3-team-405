@@ -6,7 +6,7 @@ import Swiper from "react-native-deck-swiper";
 import MatchCard from "@/components/MatchCard";
 import Screen from "@/components/ui/Screen";
 
-import { users } from "@/data/mock";
+import { users } from "@/data/users";
 
 type MatchUser = {
   id: number;
