@@ -1,53 +1,73 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+
+import { router } from 'expo-router';
+
+import { COLORS, SHADOWS } from '@/constants/theme';
 
 export default function DiscoverPreviewCard() {
-    return (
-        <View style={styles.card}>
-            <Text style={styles.title}>New Study Matches</Text>
+  return (
+    <View style={styles.card}>
+      <Text style={styles.title}>
+        New Study Matches
+      </Text>
 
-            <Text style={styles.subtitle}>
-                12 students match your interests and study goals.
-            </Text>
+      <Text style={styles.subtitle}>
+        12 students match your interests
+        and study goals.
+      </Text>
 
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Explore Matches</Text>
-            </TouchableOpacity>
-        </View>
-    );
+      <TouchableOpacity
+        style={styles.button}
+        activeOpacity={0.8}
+        onPress={() => router.push('/match')}
+      >
+        <Text style={styles.buttonText}>
+          Explore Matches
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    card: {
-        backgroundColor: '#4F46E5',
-        borderRadius: 28,
-        padding: 24,
-        marginBottom: 24,
-    },
+  card: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 30,
+    padding: 24,
+    marginBottom: 28,
 
-    title: {
-        color: '#FFFFFF',
-        fontSize: 24,
-        fontWeight: '700',
-        marginBottom: 10,
-    },
+    ...SHADOWS.card,
+  },
 
-    subtitle: {
-        color: '#E0E7FF',
-        lineHeight: 22,
-        marginBottom: 22,
-        fontSize: 15,
-    },
+  title: {
+    color: '#FFFFFF',
+    fontSize: 26,
+    fontWeight: '700',
+    marginBottom: 12,
+  },
 
-    button: {
-        backgroundColor: '#FFFFFF',
-        paddingVertical: 14,
-        borderRadius: 18,
-        alignItems: 'center',
-    },
+  subtitle: {
+    color: '#E0E7FF',
+    lineHeight: 24,
+    marginBottom: 24,
+    fontSize: 16,
+  },
 
-    buttonText: {
-        color: '#4F46E5',
-        fontWeight: '700',
-        fontSize: 16,
-    },
+  button: {
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 15,
+    borderRadius: 18,
+    alignItems: 'center',
+  },
+
+  buttonText: {
+    color: COLORS.primary,
+    fontWeight: '700',
+    fontSize: 16,
+  },
 });

@@ -1,34 +1,59 @@
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+} from 'react-native';
 
-export default function ChatPreviewCard() {
-    return (
-        <View style={styles.card}>
-            <Text style={styles.name}>Anna Keller</Text>
+import { router } from 'expo-router';
 
-            <Text style={styles.message}>
-                Ready for algorithms later?
-            </Text>
-        </View>
-    );
+import { COLORS, SHADOWS } from '@/constants/theme';
+
+type Props = {
+  name: string;
+  message: string;
+};
+
+export default function ChatPreviewCard({
+  name,
+  message,
+}: Props) {
+  return (
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.8}
+      onPress={() => router.push('/chat')}
+    >
+      <Text style={styles.name}>
+        {name}
+      </Text>
+
+      <Text style={styles.message}>
+        {message}
+      </Text>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
-    card: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: 22,
-        padding: 18,
-        marginBottom: 14,
-    },
+  card: {
+    backgroundColor: COLORS.card,
+    borderRadius: 22,
+    padding: 18,
+    marginBottom: 14,
 
-    name: {
-        fontWeight: '700',
-        color: '#0F172A',
-        marginBottom: 6,
-        fontSize: 16,
-    },
+    ...SHADOWS.card,
+  },
 
-    message: {
-        color: '#64748B',
-        lineHeight: 20,
-    },
+  name: {
+    fontWeight: '700',
+    color: COLORS.text,
+    marginBottom: 6,
+    fontSize: 16,
+  },
+
+  message: {
+    color: COLORS.subtext,
+    lineHeight: 20,
+  },
 });
+
