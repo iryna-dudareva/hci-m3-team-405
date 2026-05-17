@@ -12,50 +12,91 @@ type User = {
   subject: string;
   bio: string;
   image: string;
+  age: number;
+  location: string;
+  studyStyle: string;
+  availability: string; 
+  languages: string; 
 };
 
 export default function MatchCard({ user }: { user: User }) {
   const [expanded, setExpanded] = useState(false);
+
   return (
     <View style={styles.card}>
       <Image source={{ uri: user.image }} style={styles.image} />
-      <LinearGradient colors={["transparent", "rgba(0,0,0,0.75)"]} style={styles.gradient} />
 
-      <Pressable onPress={() => setExpanded(!expanded)}>
-        <BlurView intensity={55} tint="light" style={styles.content}>
-          <Text style={styles.name}>{user.name}</Text>
+      <LinearGradient
+        colors={[
+          "transparent",
+          "rgba(0,0,0,0.15)",
+          "rgba(0,0,0,0.88)",
+        ]}
+        style={styles.gradient}
+      />
 
-          <Text style={styles.subject}>
-            {user.subject}
-          </Text>
+      {/* CONTENT */}
+      <Pressable
+        style={StyleSheet.absoluteFillObject}
+        onPress={() => setExpanded(!expanded)}
+      >
+        <BlurView intensity={55} tint="dark" style={styles.content}>
+          <View style={styles.headerRow}>
+            <View style={{ flex: 1 }}>
+              <Text numberOfLines={1} style={styles.name}>
+                {user.name}, {user.age}
+              </Text>
 
-          <Text style={styles.bio}>
+              <Text style={styles.subject}>
+                {user.subject}
+              </Text>
+            </View>
+
+            <View style={styles.locationPill}>
+              <Text style={styles.locationText}>
+                {user.location}
+              </Text>
+            </View>
+          </View>
+          <Text
+            style={styles.bio}
+            numberOfLines={expanded ? 6 : 2}
+          >
             {user.bio}
           </Text>
 
           {expanded && (
             <View style={styles.extraContent}>
-              <Text style={styles.extraText}>
-                📚 Favorite Subject: Algorithms
-              </Text>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>📘 Study Style</Text>
+                <Text style={styles.extraText}>
+                  {user.studyStyle}
+                </Text>
+              </View>
 
-              <Text style={styles.extraText}>
-                ⏰ Usually studies in the evening
-              </Text>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>⏰ Availability</Text>
+                <Text style={styles.extraText}>
+                  {user.availability}
+                </Text>
+              </View>
 
-              <Text style={styles.extraText}>
-                🎓 3rd Semester
-              </Text>
-
-              <Text style={styles.extraText}>
-                ☕ Loves coffee study sessions
-              </Text>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>🌍 Languages</Text>
+                <Text style={styles.extraText}>
+                  {user.languages}
+                </Text>
+              </View>
             </View>
           )}
 
-          <Text style={styles.tapHint}>
-            {expanded ? "Tap to close" : "Tap for more"}
-          </Text>
+          <View style={styles.buttonRow}>
+            <View style={styles.expandButton}>
+              <Text style={styles.tapHint}>
+                {expanded ? "Show less" : "More about me"}
+              </Text>
+            </View>
+          </View>
         </BlurView>
       </Pressable>
     </View>
@@ -66,14 +107,10 @@ const styles = StyleSheet.create({
   card: {
     width: "92%",
     height: "82%",
-
     backgroundColor: COLORS.card,
-    borderRadius: 32,
-
+    borderRadius: 34,
     overflow: "hidden",
-
     alignSelf: "center",
-
     ...SHADOWS.card,
   },
 
@@ -83,58 +120,105 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
 
-  content: {
-    position: "absolute",
-    bottom: 34,
-    left: 18,
-    right: 18,
-    paddingVertical: 22,
-    paddingHorizontal: 20,
-    borderRadius: 24,
-    overflow: "hidden",
-    backgroundColor: "rgba(255,255,255,0.12)",
-  },
-
-  name: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#ffffff",
-    marginBottom: 6,
-  },
-
-  subject: {
-    fontSize: 16,
-    color: "#ffffff",
-    fontWeight: "600",
-    marginBottom: 10,
-  },
-
-  bio: {
-    color: "rgba(255,255,255,0.9)",
-    lineHeight: 22,
-    fontSize: 15,
-  },
-
   gradient: {
     position: "absolute",
     bottom: 0,
     width: "100%",
-    height: "65%",
+    height: "72%",
+  },
+
+  content: {
+    position: "absolute",
+    left: 18,
+    right: 18,
+    bottom: 22,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderRadius: 28,
+    overflow: "hidden",
+    backgroundColor: "rgba(255,255,255,0.10)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+  },
+
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 12,
+  },
+
+  name: {
+    fontSize: 30,
+    fontWeight: "800",
+    color: "#ffffff",
+    letterSpacing: -0.7,
+  },
+
+  subject: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "rgba(255,255,255,0.92)",
+    marginTop: 4,
+  },
+
+  locationPill: {
+    backgroundColor: "rgba(255,255,255,0.14)",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 22,
+    marginLeft: 10,
+  },
+
+  locationText: {
+    color: "#ffffff",
+    fontSize: 13,
+    fontWeight: "700",
+  },
+
+  bio: {
+    color: "rgba(255,255,255,0.96)",
+    fontSize: 15,
+    lineHeight: 24,
   },
 
   extraContent: {
-    marginTop: 14,
+    marginTop: 18,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(255,255,255,0.12)",
+  },
+
+  infoRow: {
+    marginBottom: 14,
+  },
+
+  infoLabel: {
+    color: "#ffffff",
+    fontWeight: "700",
+    fontSize: 14,
+    marginBottom: 4,
   },
 
   extraText: {
+    color: "rgba(255,255,255,0.88)",
     fontSize: 14,
-    color: "rgba(255,255,255,0.9)",
-    marginBottom: 6,
-    lineHeight: 20,
+    lineHeight: 21,
+  },
+
+  buttonRow: {
+    marginTop: 18,
+    alignItems: "center",
+  },
+
+  expandButton: {
+    backgroundColor: "rgba(255,255,255,0.14)",
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 20,
   },
 
   tapHint: {
-    marginTop: 14,
     color: "#ffffff",
     fontWeight: "700",
     fontSize: 14,
