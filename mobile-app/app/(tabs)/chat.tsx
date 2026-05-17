@@ -115,20 +115,6 @@ export default function Chat() {
             </Text>
           </View>
 
-        <TouchableOpacity
-          onPress = {() => router.back()}
-          style = {{
-            marginBottom: 10,
-            alignSelf: "flex-start",
-            backgroundColor: COLORS.card,
-            paddingVertical: 8,
-            paddingHorizontal: 14,
-            borderRadius: 12,
-          }}>
-            <Text style = {{ color: COLORS.text }}>HOME </Text>
-
-        </TouchableOpacity>
-
         <FlatList
           style={{ flex: 1 }}
           contentContainerStyle={{ paddingBottom: 0 }}
