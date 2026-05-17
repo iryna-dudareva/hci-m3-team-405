@@ -7,17 +7,18 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Alert
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Screen from "@/components/ui/Screen";
 import { COLORS } from "@/constants/theme";
-import { Alert } from "react-native";
+import { router } from "expo-router"
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Chat() {
   const [message, setMessage] = useState("");
  
-  const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
   type Message = {
     id: number,
@@ -86,16 +87,47 @@ export default function Chat() {
     >
       <Screen style={{ flex: 1 }}>
         
-        <Text
-          style={{
-            color: COLORS.text,
-            fontSize: 34,
-            fontWeight: "700",
-            marginBottom: 20,
-          }}
-        >
-          Chat
-        </Text>
+        <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 20,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{
+                padding: 6,
+                marginRight: 10,
+              }}
+            >
+              <Ionicons name="chevron-back" size={28} color={COLORS.text} />
+            </TouchableOpacity>
+
+            <Text
+              style={{
+                color: COLORS.text,
+                fontSize: 34,
+                fontWeight: "700",
+              }}
+            >
+              Chat
+            </Text>
+          </View>
+
+        <TouchableOpacity
+          onPress = {() => router.back()}
+          style = {{
+            marginBottom: 10,
+            alignSelf: "flex-start",
+            backgroundColor: COLORS.card,
+            paddingVertical: 8,
+            paddingHorizontal: 14,
+            borderRadius: 12,
+          }}>
+            <Text style = {{ color: COLORS.text }}>HOME </Text>
+
+        </TouchableOpacity>
 
         <FlatList
           style={{ flex: 1 }}
