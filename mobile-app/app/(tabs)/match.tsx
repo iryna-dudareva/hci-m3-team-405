@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import Swiper from "react-native-deck-swiper";
 
 import MatchCard from "@/components/MatchCard";
@@ -11,71 +11,88 @@ const { width, height } = Dimensions.get("window");
 export default function MatchScreen() {
   return (
     <Screen>
-      <View style={styles.container}>
-        <Swiper
-          cards={users}
-          renderCard={(card) =>
-            card ? <MatchCard user={card} /> : <View />
-          }
-          stackSize={3}
-          backgroundColor="transparent"
-          animateCardOpacity
-          horizontalSwipe
-          horizontalThreshold={width * 0.22}
-          verticalSwipe={false}
-          cardHorizontalMargin={0}
-          cardVerticalMargin={0}
-          infinite
-          disableTopSwipe
-          disableBottomSwipe
+      <>
+        <Text style={styles.title}>
+          Find your Study Buddy
+        </Text>
+        <View style={styles.container}>
+          <Swiper
+            cards={users}
+            renderCard={(card) => card ? <MatchCard user={card} /> : <View /> }
+            stackSize={1}
+            backgroundColor="transparent"
+            animateCardOpacity
+            animateOverlayLabelsOpacity
+            disableBottomSwipe
+            disableTopSwipe
+            verticalSwipe={false}
+            cardVerticalMargin={0}
+            cardHorizontalMargin={0}
+            outputRotationRange={["-8deg", "0deg", "8deg"]}
 
-          overlayLabels={{
-            left: {
-              title: "NOPE",
-              style: {
-                label: {
-                  backgroundColor: "#FF4D67",
-                  color: "white",
-                  fontSize: 32,
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
-                  borderRadius: 16,
-                  overflow: "hidden",
-                },
-                wrapper: {
-                  flexDirection: "column",
-                  alignItems: "flex-end",
-                  justifyContent: "flex-start",
-                  marginTop: 40,
-                  marginLeft: -40,
+            overlayLabels={{
+              left: {
+                title: "PASS",
+                style: {
+                  label: {
+                    backgroundColor: "#FF4D67",
+                    color: "white",
+                    fontSize: 30,
+                    fontWeight: "700",
+                    paddingHorizontal: 22,
+                    paddingVertical: 12,
+                    borderRadius: 18,
+                    overflow: "hidden",
+                  },
+                  wrapper: {
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-start",
+                    marginTop: 60,
+                    marginLeft: -35,
+                  },
                 },
               },
-            },
 
-            right: {
-              title: "LIKE",
-              style: {
-                label: {
-                  backgroundColor: "#4CD964",
-                  color: "white",
-                  fontSize: 32,
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
-                  borderRadius: 16,
-                  overflow: "hidden",
-                },
-                wrapper: {
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  justifyContent: "flex-start",
-                  marginTop: 40,
-                  marginLeft: 40,
+              right: {
+                title: "MATCH",
+                style: {
+                  label: {
+                    backgroundColor: "#4CD964",
+                    color: "white",
+                    fontSize: 30,
+                    fontWeight: "700",
+                    paddingHorizontal: 22,
+                    paddingVertical: 12,
+                    borderRadius: 18,
+                    overflow: "hidden",
+                  },
+                  wrapper: {
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    justifyContent: "flex-start",
+                    marginTop: 60,
+                    marginLeft: 35,
+                  },
                 },
               },
-            },
-          }}
-        />
-      </View>
+            }}
+
+            containerStyle={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+
+            cardStyle={{
+              width: width * 0.92,
+              height: height * 0.72,
+
+              borderRadius: 32,
+            }}
+          />
+        </View>
+      </>
     </Screen>
   );
 }
@@ -85,7 +102,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingBottom: 40,
+  },
 
-    paddingBottom: 70,
+  title: {
+    fontSize: 34,
+    fontWeight: "800",
+    color: "#111",
+    marginTop: 10,
+    marginBottom: 26,
+    letterSpacing: -1,
   },
 });
