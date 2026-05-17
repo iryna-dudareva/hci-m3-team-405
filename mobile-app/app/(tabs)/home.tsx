@@ -8,9 +8,11 @@ import {
 
 import { router } from 'expo-router';
 
-import { users } from '@/data/mock';
 import { sessions } from '@/data/sessions';
 import { chats } from '@/data/chats';
+import { getUsers } from '@/services/users.service';
+
+import { useEffect, useState } from 'react';
 
 import SessionCard from '@/components/cards/SessionCard';
 import ChatPreviewCard from '@/components/cards/ChatPreviewCard';
@@ -19,6 +21,18 @@ import DiscoverPreviewCard from '@/components/cards/DiscoverPreviewCard';
 import { COLORS } from '@/constants/theme';
 
 export default function HomeScreen() {
+  const [users, setUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function loadUsers() {
+      const data = await getUsers();
+
+      setUsers(data);
+    }
+
+    loadUsers();
+  }, []);
+
   return (
     <ScrollView
       style={styles.container}
@@ -57,7 +71,7 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      <DiscoverPreviewCard />
+      <DiscoverPreviewCard count={users.length}/>
 
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>

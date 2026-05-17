@@ -1,37 +1,82 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import {useEffect, useState} from "react";
+import {Dimensions, Pressable, StyleSheet, Text, View, Modal, TouchableOpacity} from "react-native";
 import Swiper from "react-native-deck-swiper";
 
 import MatchCard from "@/components/MatchCard";
 import Screen from "@/components/ui/Screen";
 
-import { users } from "@/data/mock";
+import { getUsers } from "@/services/users.service";
+import {createLike, getLikedUsers, checkMatch} from '@/services/likes.service';
+import { createChat } from '@/services/chat.service';
 
-type MatchUser = {
-  id: number;
-  name: string;
-  subject: string;
-  bio: string;
-  image: string;
-  age: number;
-  location: string;
-  studyStyle: string;
-  availability: string;
-  languages: string;
-};
+import { User } from "@/types/user";
+import {COLORS} from "@/constants/theme";
+
 
 const { width, height } = Dimensions.get("window");
 
 export default function MatchScreen() {
   const router = useRouter();
-  const [matchedUsers, setMatchedUsers] = useState<MatchUser[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [matchedUsers, setMatchedUsers] = useState<User[]>([]);
+
+  const [showMatchModal, setShowMatchModal] = useState(false);
+
+  const [currentMatch, setCurrentMatch] = useState<User | null>(null);
+
+
+  const CURRENT_USER_ID = 'c5d4b6a3-6f3b-4e1a-9d4d-1f4f7f2e3c21';
+
+  useEffect(() => {
+    async function loadUsers() {
+      const data = await getUsers();
+      const likedUsers = await getLikedUsers(CURRENT_USER_ID);
+
+      const likedUserIds = likedUsers.map(
+          (like) => like.to_user_id
+      );
+
+      const filteredUsers = data.filter(
+          (user) =>
+              user.id !== CURRENT_USER_ID &&
+              !likedUserIds.includes(user.id)
+      );
+
+      setUsers(filteredUsers);
+
+      setLoading(false);
+    }
+
+    loadUsers();
+  }, []);
+
+
   const [showMatches, setShowMatches] = useState(true);
   const [swiped, setSwiped] = useState(0);
 
-  const storeMatch = (cardIndex: number) => {
+  const storeMatch = async (cardIndex: number) => {
     const newMatch = users[cardIndex];
     if (!newMatch) return;
+    try {
+      await createLike(
+          CURRENT_USER_ID,
+          newMatch.id
+      );
+
+      const isMatch = await checkMatch(
+          CURRENT_USER_ID,
+          newMatch.id
+      );
+
+      if (isMatch) {
+        await createChat(
+            CURRENT_USER
+    } catch (error) {
+      console.log(error);
+    }
+
     setSwiped((prev) => prev + 1);
     setMatchedUsers((current) =>
       current.some((user) => user.id === newMatch.id)
@@ -41,11 +86,19 @@ export default function MatchScreen() {
     setShowMatches(true);
   };
 
-  const startChat = (user: MatchUser) => {
+  const startChat = (user: User) => {
     router.push(
       `/chat?name=${encodeURIComponent(user.name)}&id=${user.id}`,
     );
   };
+
+  if (loading) {
+    return (
+        <Screen>
+          <Text>Loading users...</Text>
+        </Screen>
+    );
+  }
 
   return (
     <Screen>
@@ -204,7 +257,36 @@ export default function MatchScreen() {
           </View>
         ) : null}
       </>
+      <Modal
+          visible={showMatchModal}
+          transparent
+          animationType="fade"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.matchTitle}>
+              🎉 It's a Match!
+            </Text>
+
+            <Text style={styles.matchSubtitle}>
+              You and {currentMatch?.name} liked each other.
+            </Text>
+
+            <TouchableOpacity
+                style={styles.matchButton}
+                onPress={() => {
+                  setShowMatchModal(false);
+                }}
+            >
+              <Text style={styles.matchButtonText}>
+                Continue
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </Screen>
+
   );
 }
 
@@ -400,6 +482,49 @@ const styles = StyleSheet.create({
   viewMatchesButtonLargeText: {
     color: "#fff",
     fontWeight: "700",
+    fontSize: 16,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  modalCard: {
+    width: '85%',
+    backgroundColor: COLORS.card,
+    borderRadius: 30,
+    padding: 30,
+    alignItems: 'center',
+  },
+
+  matchTitle: {
+    fontSize: 34,
+    fontWeight: '800',
+    color: COLORS.primary,
+    marginBottom: 16,
+  },
+
+  matchSubtitle: {
+    fontSize: 17,
+    color: COLORS.subtext,
+    textAlign: 'center',
+    lineHeight: 26,
+    marginBottom: 30,
+  },
+
+  matchButton: {
+    backgroundColor: COLORS.primary,
+    width: '100%',
+    paddingVertical: 16,
+    borderRadius: 18,
+    alignItems: 'center',
+  },
+
+  matchButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
     fontSize: 16,
   },
 });
