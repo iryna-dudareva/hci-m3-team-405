@@ -8,7 +8,7 @@ import {
 
 import { router } from 'expo-router';
 
-import { users } from '@/data/mock';
+/*import { users } from '@/data/users';*/
 import { sessions } from '@/data/sessions';
 import { chats } from '@/data/chats';
 

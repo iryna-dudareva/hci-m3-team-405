@@ -1,5 +1,5 @@
-import { mockChats } from "@/data/mockChats";
+import { chats } from "@/data/chats";
 
 export const getChats = async () => {
-    return mockChats;
+    return chats;
 };

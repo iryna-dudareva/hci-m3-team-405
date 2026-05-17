@@ -8,8 +8,11 @@ import {
 import { router } from 'expo-router';
 
 import { COLORS, SHADOWS } from '@/constants/theme';
+import { getMatchCount } from "@/services/userService";
 
 export default function DiscoverPreviewCard() {
+  const matchCount = getMatchCount();
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>
@@ -17,7 +20,7 @@ export default function DiscoverPreviewCard() {
       </Text>
 
       <Text style={styles.subtitle}>
-        12 students match your interests
+        {matchCount} students match your interests
         and study goals.
       </Text>
 
