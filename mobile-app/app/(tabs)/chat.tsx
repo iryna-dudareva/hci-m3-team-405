@@ -1,64 +1,165 @@
-import { useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
-
+import { useState } from "react";
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Screen from "@/components/ui/Screen";
 import { COLORS } from "@/constants/theme";
+import { Alert } from "react-native";
 
 export default function Chat() {
-  const params = useLocalSearchParams();
-  const name = Array.isArray(params.name) ? params.name[0] : params.name;
-  const chatTitle = name ? `Chat mit ${name}` : "Chat";
+  const [message, setMessage] = useState("");
+ 
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = useBottomTabBarHeight();
+  type Message = {
+    id: number,
+    text: string,
+    me: boolean
+  };
 
-  const messages = [
-    {
-      id: 1,
-      text: name ? `Hey ${name}, lernen wir morgen?` : "Hey, lernen wir morgen?",
-      me: false,
-    },
+
+  const [messages, setMessages] = useState<Message[]>([
+    { id: 1, text: "Hey, lernen wir morgen?", me: false },
     { id: 2, text: "Ja passt!", me: true },
     { id: 3, text: "Welche Uhrzeit?", me: false },
+  ]);
+  
+  const botReplies = [
+    "Alright",
+    "For sure",
+    "If you want, yes",
+    "Sounds good",
+    "Ja passt",
+    "Cool",
   ];
 
+  
+  const deleteMessage = (id: number) => {
+    Alert.alert("Delete message?", "", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => {
+          setMessages((prev) => prev.filter((m) => m.id !== id));
+        },
+      },
+    ]);
+  };
+    
+  const getRandomReply = () => {
+    return botReplies[Math.floor(Math.random() * botReplies.length)];
+  };
+  const sendMessage = () => {
+    if (!message.trim()) return;
+
+    const newMsg = {
+      id: Date.now(),
+      text: message,
+      me: true,
+    };
+    setMessages((prev) => [...prev, newMsg]);
+    setMessage("");
+
+    setTimeout(() =>{
+      const reply = {
+        id: Date.now() + 1,
+        text: getRandomReply(),
+        me: false,
+      };
+      setMessages((prev) => [...prev, reply]);
+    }, 800)
+  };
+
   return (
-    <Screen>
-      <Text
-        style={{
-          color: COLORS.text,
-          fontSize: 34,
-          fontWeight: "700",
-          marginBottom: 30,
-        }}
-      >
-        {chatTitle}
-      </Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <Screen style={{ flex: 1 }}>
+        
+        <Text
+          style={{
+            color: COLORS.text,
+            fontSize: 34,
+            fontWeight: "700",
+            marginBottom: 20,
+          }}
+        >
+          Chat
+        </Text>
 
-      <View>
-        {messages.map((m) => (
-          <View
-            key={m.id}
-            style={{
-              alignSelf: m.me ? "flex-end" : "flex-start",
-              backgroundColor: m.me
-                ? COLORS.primary
-                : COLORS.card,
-
-              padding: 16,
-              borderRadius: 20,
-              marginBottom: 14,
-              maxWidth: "80%",
-            }}
-          >
-            <Text
+        <FlatList
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingBottom: 0 }}
+          data={messages}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onLongPress={() => deleteMessage(item.id)}
+              activeOpacity={0.7}
               style={{
-                color: COLORS.text,
-                fontSize: 15,
+                alignSelf: item.me ? "flex-end" : "flex-start",
+                backgroundColor: item.me ? COLORS.primary : COLORS.card,
+                padding: 16,
+                borderRadius: 20,
+                marginBottom: 14,
+                maxWidth: "80%",
               }}
             >
-              {m.text}
-            </Text>
-          </View>
-        ))}
-      </View>
-    </Screen>
+              <Text style={{ color: COLORS.text }}>
+                {item.text}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+  
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            paddingVertical: 10,
+            paddingBottom: tabBarHeight - 10
+          }}
+        >
+          <TextInput
+            value={message}
+            onChangeText={setMessage}
+            placeholder="Type message..."
+            placeholderTextColor="#999"
+            style={{
+              flex: 1,
+              backgroundColor: COLORS.card,
+              color: COLORS.text,
+              padding: 14,
+              borderRadius: 16,
+             
+            }}
+          />
+          
+  
+          <TouchableOpacity
+            onPress={sendMessage}
+            style={{
+              backgroundColor: COLORS.primary,
+              justifyContent: "center",
+              paddingHorizontal: 20,
+              borderRadius: 16,
+            }}
+          >
+            <Text style={{ color: "white" }}>Send</Text>
+          </TouchableOpacity>
+        </View>
+  
+      </Screen>
+    </KeyboardAvoidingView>
   );
 }
