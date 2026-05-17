@@ -7,16 +7,25 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  Keyboard
 } from "react-native";
-
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Screen from "@/components/ui/Screen";
 import { COLORS } from "@/constants/theme";
+import { Alert } from "react-native";
 
 export default function Chat() {
   const [message, setMessage] = useState("");
+ 
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = useBottomTabBarHeight();
+  type Message = {
+    id: number,
+    text: string,
+    me: boolean
+  };
 
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     { id: 1, text: "Hey, lernen wir morgen?", me: false },
     { id: 2, text: "Ja passt!", me: true },
     { id: 3, text: "Welche Uhrzeit?", me: false },
@@ -30,6 +39,21 @@ export default function Chat() {
     "Ja passt",
     "Cool",
   ];
+
+  
+  const deleteMessage = (id: number) => {
+    Alert.alert("Delete message?", "", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => {
+          setMessages((prev) => prev.filter((m) => m.id !== id));
+        },
+      },
+    ]);
+  };
+    
   const getRandomReply = () => {
     return botReplies[Math.floor(Math.random() * botReplies.length)];
   };
@@ -74,16 +98,16 @@ export default function Chat() {
 
         <FlatList
           style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: 10 }}
+          contentContainerStyle={{ paddingBottom: 0 }}
           data={messages}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View
+            <TouchableOpacity
+              onLongPress={() => deleteMessage(item.id)}
+              activeOpacity={0.7}
               style={{
                 alignSelf: item.me ? "flex-end" : "flex-start",
-                backgroundColor: item.me
-                  ? COLORS.primary
-                  : COLORS.card,
+                backgroundColor: item.me ? COLORS.primary : COLORS.card,
                 padding: 16,
                 borderRadius: 20,
                 marginBottom: 14,
@@ -93,7 +117,7 @@ export default function Chat() {
               <Text style={{ color: COLORS.text }}>
                 {item.text}
               </Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
   
@@ -102,7 +126,7 @@ export default function Chat() {
             flexDirection: "row",
             gap: 10,
             paddingVertical: 10,
-            paddingBottom: 30,
+            paddingBottom: tabBarHeight - 10
           }}
         >
           <TextInput
@@ -119,6 +143,7 @@ export default function Chat() {
              
             }}
           />
+          
   
           <TouchableOpacity
             onPress={sendMessage}
@@ -127,7 +152,6 @@ export default function Chat() {
               justifyContent: "center",
               paddingHorizontal: 20,
               borderRadius: 16,
-              
             }}
           >
             <Text style={{ color: "white" }}>Send</Text>
