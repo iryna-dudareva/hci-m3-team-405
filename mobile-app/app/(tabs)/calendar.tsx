@@ -1,76 +1,75 @@
-import { Text, View } from "react-native";
+import { useState, useMemo } from "react";
+import { FlatList, Pressable, Text } from "react-native";
 
 import Screen from "@/components/ui/Screen";
 import { COLORS } from "@/constants/theme";
+import { StudyEvent } from "@/types/study";
+import { StudyEvents as initialData } from "@/data/studyEvents";
+
+
+import StudyEventCard from "@/components/studyplan/StudyEventCard";
+import AddEventModal from "@/components/studyplan/AddEventModal";
+import FilterBar from "@/components/studyplan/FilterBar";
+
 
 export default function Calendar() {
+
+  const [events, setEvents] = useState<StudyEvent[]>(initialData);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [filter, setFilter] = useState("ALL");
+  const [subjects, setSubjects] = useState(["ALL", "CS", "DB"]);
+ 
+
+  const addSubject = () => {
+    const newSubject = prompt("Enter subject"); //not in native replace -> new component like addModal?
+
+    if (
+      newSubject && !subjects.includes(newSubject.toUpperCase())
+    )
+      {
+      setSubjects((prev) => [
+        ...prev,
+        newSubject.toUpperCase(),
+      ]);
+    }
+  
+  };
+
+
+  const filteredEvents = useMemo(() => {
+    if (filter === "ALL") return events;
+    return events.filter((e) => e.subject === filter);
+  }, [events, filter]);
+
+
+  const addEvent = (event: StudyEvent) => {
+    setEvents((prev) => [event, ...prev]);
+  };
+
+
   return (
     <Screen>
       <Text
         style={{
           color: COLORS.text,
-          fontSize: 34,
-          fontWeight: "700",
+          fontSize: 28,
+          fontWeight: "800",
           marginBottom: 30,
         }}
       >
         Study Plan
       </Text>
 
-      <View
-        style={{
-          backgroundColor: COLORS.card,
-          padding: 22,
-          borderRadius: 24,
-          marginBottom: 18,
-        }}
-      >
-        <Text
-          style={{
-            color: COLORS.text,
-            fontSize: 18,
-            fontWeight: "600",
-          }}
-        >
-          📚 Algorithms with Anna
-        </Text>
+      <FilterBar active={filter} setActive={setFilter} subjects={subjects} onAddSubject={addSubject} />
+      
+        <Pressable onPress={() => setModalVisible(true)} style={{ backgroundColor: COLORS.primary, padding: 14, borderRadius: 14, marginBottom: 12, }}>
+          <Text  style={{ color: "#fff", fontWeight: "700" }}> + Add Study Sesh</Text>
+        </Pressable>
 
-        <Text
-          style={{
-            color: COLORS.subtext,
-            marginTop: 8,
-          }}
-        >
-          Monday • 14:00
-        </Text>
-      </View>
+      <FlatList data={filteredEvents} keyExtractor={(item) => item.id.toString()} renderItem={({ item }) => <StudyEventCard event={item} />} />
+      
+      <AddEventModal visible={modalVisible} onClose={() => setModalVisible(false)} onAdd={addEvent} />
 
-      <View
-        style={{
-          backgroundColor: COLORS.card,
-          padding: 22,
-          borderRadius: 24,
-        }}
-      >
-        <Text
-          style={{
-            color: COLORS.text,
-            fontSize: 18,
-            fontWeight: "600",
-          }}
-        >
-          🧠 Database Exam Prep
-        </Text>
-
-        <Text
-          style={{
-            color: COLORS.subtext,
-            marginTop: 8,
-          }}
-        >
-          Wednesday • 10:00
-        </Text>
-      </View>
     </Screen>
   );
 }
