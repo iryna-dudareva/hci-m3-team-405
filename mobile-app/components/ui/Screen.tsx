@@ -7,10 +7,11 @@ import { COLORS } from "@/constants/theme";
 type Props = {
   children: ReactNode;
   style?: ViewStyle;
+  showsVerticalScrollIndicator?: boolean;
 };
 
 export default function Screen({
-  children, style
+  children, style,
 }: Props){
   return (
     <SafeAreaView style={styles.container}>
