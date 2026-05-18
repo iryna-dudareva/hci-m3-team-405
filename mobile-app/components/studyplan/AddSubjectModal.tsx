@@ -1,35 +1,29 @@
-import { useState } from "react";
 import { Modal, View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { COLORS } from "@/constants/theme";
-import { StudyEvent } from "@/types/study";
 
-export default function AddEventModal({
+import { useState } from "react";
+
+
+
+export default function AddSubjectModal({
     visible, onClose, onAdd,
 }: {
     visible: boolean;
     onClose: () => void;
-    onAdd: (event: StudyEvent) => void;
+    onAdd: (subject: string) => void;
     }) {
-    const [title, setTitle] = useState("");
+
     const [subject, setSubject] = useState("");
-    const [date, setDate] = useState("");
-    const [time, setTime] = useState("");
+
 
     const handleAdd = () => {
-        if (!title || !subject || !date || !time) return;
+        if (!subject.trim()) return;
 
-        onAdd({
-            id: Date.now(),
-            title,
-            subject,
-            date,
-            time,
-        });
+        onAdd(subject.trim());
 
-        setTitle("");
+
         setSubject("");
-        setDate("");
-        setTime("");
+
 
 
         onClose();
@@ -39,15 +33,13 @@ export default function AddEventModal({
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.overlay}>
                 <View style={styles.modal}>
-                    <Text style={styles.title}> New Study Event</Text>
+                    <Text style={styles.title}> New Subject</Text>
 
-                    <TextInput placeholder="Title"  placeholderTextColor={COLORS.subtext} value={title} onChangeText={setTitle} style={styles.input} />
-                    <TextInput placeholder="Subject"  placeholderTextColor={COLORS.subtext} value={subject} onChangeText={setSubject} style={styles.input} />
-                    <TextInput placeholder="Date (YYYY-MM-DD)"  placeholderTextColor={COLORS.subtext} value={date} onChangeText={setDate} style={styles.input} />
-                    <TextInput placeholder="Time (HH:MM)"  placeholderTextColor={COLORS.subtext} value={time} onChangeText={setTime} style={styles.input} />
+                    <TextInput placeholder="Subject Name"  placeholderTextColor={COLORS.subtext} value={subject} onChangeText={setSubject} style={styles.input} />
+
                     
                     <Pressable onPress={handleAdd} style={styles.button}>
-                        <Text style={styles.buttonText}>Add Event</Text>
+                        <Text style={styles.buttonText}>Add Subject</Text>
                     </Pressable>
 
 
