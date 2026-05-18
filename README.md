@@ -1,4 +1,8 @@
-StudyBuddy - Mobile Study App for Matching with byour future Study Buddies
+## Readme - M3
+
+Gruppe: 4
+Team-Nr.: 405
+Projektthema: StudyBuddy – Mobile Study Buddy & Matchmaking App
 
 ---
 
