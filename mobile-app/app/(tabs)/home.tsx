@@ -49,7 +49,7 @@ export default function HomeScreen() {
         <TouchableOpacity
           style={styles.secondaryAction}
           activeOpacity={0.8}
-          onPress={() => router.push('/calendar')}
+          onPress={() => router.push('/calendar?creat=true')}
         >
           <Text style={styles.secondaryActionText}>
             Create Session
