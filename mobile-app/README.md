@@ -1,50 +1,93 @@
-# Welcome to your Expo app 👋
+StudyBuddy - Mobile Study App for Matching with byour future Study Buddies
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+---
 
-## Get started
+StudyBuddy is an mobile application built on React Native, designed to help students find their study partners, schedule study sessions, and communicate efficiently.
 
-1. Install dependencies
+The app structure is based off of famous matching-making apps combined with a structude study planer and integrated chat.
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+### Features
 
-   ```bash
-   npx expo start
-   ```
+# Overview/Home
 
-In the output, you'll find options to open the app in a
+-Overview of current system state,
+-including upcoming sessions and recent chats
+-direct buttons leading to Discover or Study Plan(Create Session) for quick access
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+# Discover/Matching
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+-Swipe-based interface for discovering study partners
+-Match system with saved connections
+-Instant access to chatting after a match
 
-## Get a fresh project
+# Chat
 
-When you're ready, run:
+-Basic messaging UI for exchange between matched users
 
-```bash
-npm run reset-project
-```
+# Study Plan
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+-Add and manage study sessions
+-View upcoming events in a structured list
+-Filter sessions by subject
 
-## Learn more
+# Profile
 
-To learn more about developing your project with Expo, look at the following resources:
+-personalisation of experience
+-visible progress data for motivation
+-settings and log out(when logged in)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Stack
 
-## Join the community
+-Expo https://docs.expo.dev/
+(+Expo Status Bar ( https://docs.expo.dev/versions/latest/sdk/status-bar/))
+-Expo Router https://docs.expo.dev/router/introduction/
+-TypeScript https://www.typescriptlang.org/docs/
+-React Native https://reactnative.dev/docs/getting-started
+(+ libraries including: Deck Swiper (https://github.com/alexbrillant/react-native-deck-swiper), datetimepicker (https://github.com/react-native-datetimepicker/datetimepicker))
+-React Navigation https://reactnavigation.org/docs/getting-started
 
-Join our community of developers creating universal apps.
+The project is built on component-based architecture usinf Expo for scalable navigation and modular design.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Installation & Setup
+
+## 1. Reccomended prerequisites
+
+    -Node.js(LTS version)
+    -npm or yarn (comes with Node)
+    -Git
+    -Expo CLI(optional)
+
+## 2. Dependencies
+
+    -in mobile-app folder "npm install"
+
+## 3. Start the dev server
+
+    -"npx expo start" / "npx expo start --tunnel"
+
+## 4. Run the app
+
+    -On device:
+        -Expo Go app -> access through QR Code
+    -On emulator:
+        -Android Studio or Xcode Simulator
+
+### Data Handling
+
+    -Note that current version od StudyBuddy is only for demo perposes therefore only mock data in mobile-app/data is in use.
+
+### Design Decisions
+
+    -Clean minimal UI
+    -Card-based layout
+    -Mobile-first responsive design
+    -Emphasis on fast interactions
+
+### Future impovemets
+
+    -Backend integration
+    -Push-notifications
+    -Calendar view(tabular layout instead of list)
+    -Filtering system for matches and events
