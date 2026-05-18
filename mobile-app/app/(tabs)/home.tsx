@@ -8,10 +8,26 @@ import {
 
 import { router } from 'expo-router';
 
-import { users } from '@/data/mock';
+/*
+|--------------------------------------------------------------------------
+| Mock data imports
+|--------------------------------------------------------------------------
+| These files currently simulate backend data.
+| Later, these can be replaced with API/database requests.
+|--------------------------------------------------------------------------
+*/
+import { users } from '@/data/users';
 import { sessions } from '@/data/sessions';
 import { chats } from '@/data/chats';
 
+/*
+|--------------------------------------------------------------------------
+| Reusable UI components
+|--------------------------------------------------------------------------
+| Each section of the home screen is split into reusable cards
+| to keep the screen modular, scalable, and easier to maintain.
+|--------------------------------------------------------------------------
+*/
 import SessionCard from '@/components/cards/SessionCard';
 import ChatPreviewCard from '@/components/cards/ChatPreviewCard';
 import DiscoverPreviewCard from '@/components/cards/DiscoverPreviewCard';
@@ -20,10 +36,21 @@ import { COLORS } from '@/constants/theme';
 
 export default function HomeScreen() {
   return (
+      /*
+      |--------------------------------------------------------------------------
+      | Main scroll container
+      |--------------------------------------------------------------------------
+      | Allows vertical scrolling for the entire home screen content.
+      | Scroll indicator is hidden for a cleaner mobile UI.
+      |--------------------------------------------------------------------------
+      */
     <ScrollView
       style={styles.container}
       showsVerticalScrollIndicator={false}
     >
+      {/* ------------------------------------------------------------------ */}
+      {/* Welcome / Hero Section                                             */}
+      {/* ------------------------------------------------------------------ */}
       <View style={styles.header}>
         <Text style={styles.greeting}>
           Welcome back 👋
@@ -34,7 +61,9 @@ export default function HomeScreen() {
           and stay connected.
         </Text>
       </View>
-
+      {/* ------------------------------------------------------------------ */}
+      {/* Quick Action Buttons                                               */}
+      {/* ------------------------------------------------------------------ */}
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.primaryAction}
@@ -46,6 +75,7 @@ export default function HomeScreen() {
           </Text>
         </TouchableOpacity>
 
+        {/* Navigate to calendar / session creation screen */}
         <TouchableOpacity
           style={styles.secondaryAction}
           activeOpacity={0.8}
@@ -57,8 +87,18 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      <DiscoverPreviewCard />
+      {/* ------------------------------------------------------------------ */}
+      {/* Match Preview Card                                                 */}
+      {/* ------------------------------------------------------------------ */}
+      {/*
+        Displays how many study matches are currently available.
+        The amount is dynamically calculated from the users array.
+      */}
+      <DiscoverPreviewCard count={users.length}/>
 
+      {/* ------------------------------------------------------------------ */}
+      {/* Upcoming Sessions Section                                          */}
+      {/* ------------------------------------------------------------------ */}
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>
           Upcoming Sessions
@@ -74,6 +114,9 @@ export default function HomeScreen() {
           />
       ))}
 
+      {/* ------------------------------------------------------------------ */}
+      {/* Recent Chats Section                                               */}
+      {/* ------------------------------------------------------------------ */}
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>
           Recent Chats
@@ -93,6 +136,13 @@ export default function HomeScreen() {
   );
 }
 
+/*
+|--------------------------------------------------------------------------
+| Styles
+|--------------------------------------------------------------------------
+| Centralized styling for the HomeScreen component.
+|--------------------------------------------------------------------------
+*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,

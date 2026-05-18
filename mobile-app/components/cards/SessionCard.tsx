@@ -2,6 +2,15 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { COLORS, SHADOWS } from '@/constants/theme';
 
+/*
+|--------------------------------------------------------------------------
+| Component Props
+|--------------------------------------------------------------------------
+| title        -> session title / topic
+| time         -> scheduled session time
+| participants -> number of participants joining the session
+|--------------------------------------------------------------------------
+*/
 
 type Props = {
   title: string;
@@ -15,13 +24,25 @@ export default function SessionCard({
   participants,
 }: Props) {
   return (
+
+      /*
+      |--------------------------------------------------------------------------
+      | Session card
+      |--------------------------------------------------------------------------
+      | Displays a compact overview of a planned study session.
+      |--------------------------------------------------------------------------
+      */
     <View style={styles.card}>
+
+      {/* Session time */}
       <Text style={styles.time}>{time}</Text>
 
+      {/* Session title */}
       <Text style={styles.title}>
         {title}
       </Text>
 
+      {/* Participant count */}
       <Text style={styles.people}>
         {participants} participants
       </Text>

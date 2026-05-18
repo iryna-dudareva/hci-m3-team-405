@@ -8,20 +8,57 @@ import {
 import { router } from 'expo-router';
 
 import { COLORS, SHADOWS } from '@/constants/theme';
-import { getMatchCount } from "@/services/userService";
 
-export default function DiscoverPreviewCard() {
+
+/*
+|--------------------------------------------------------------------------
+| Component Props
+|--------------------------------------------------------------------------
+| count -> number of currently available study matches
+|--------------------------------------------------------------------------
+*/
+type Props = {
+  count: number;
+};
+
+export default function DiscoverPreviewCard({count}: Props) {
+
+  /*
+|--------------------------------------------------------------------------
+| Dynamic singular / plural text handling
+|--------------------------------------------------------------------------
+| Adjusts the displayed text grammatically depending
+| on the amount of matches available.
+|--------------------------------------------------------------------------
+*/
+  const studentText = count === 1 ? 'student' : 'students';
+
+  const matchText = count === 1 ? 'matches' : 'match';
   return (
+
+      /*
+   |--------------------------------------------------------------------------
+   | Main preview card
+   |--------------------------------------------------------------------------
+   | Displays a highlighted overview of available study matches.
+   |--------------------------------------------------------------------------
+   */
     <View style={styles.card}>
+
+      {/* Card title */}
       <Text style={styles.title}>
         New Study Matches
       </Text>
 
+      {/* Dynamic match preview text */}
       <Text style={styles.subtitle}>
-        12 students match your interests
-        and study goals.
+        <Text style={styles.subtitle}>
+          {count} {studentText} {matchText}
+          {' '}your interests and study goals.
+        </Text>
       </Text>
 
+      {/* Navigation button to matchmaking screen */}
       <TouchableOpacity
         style={styles.button}
         activeOpacity={0.8}
@@ -34,6 +71,14 @@ export default function DiscoverPreviewCard() {
     </View>
   );
 }
+
+/*
+|--------------------------------------------------------------------------
+| Styles
+|--------------------------------------------------------------------------
+| Centralized styling for the DiscoverPreviewCard component.
+|--------------------------------------------------------------------------
+*/
 
 const styles = StyleSheet.create({
   card: {

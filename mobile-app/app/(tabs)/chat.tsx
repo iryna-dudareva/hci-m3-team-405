@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   Text,
   View,
@@ -9,30 +10,71 @@ import {
   Platform,
   Alert
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Screen from "@/components/ui/Screen";
+
 import { COLORS } from "@/constants/theme";
 import { router } from "expo-router"
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Chat() {
-  const [message, setMessage] = useState("");
- 
-  const tabBarHeight = useBottomTabBarHeight();
-  type Message = {
+/*
+|--------------------------------------------------------------------------
+| Message type
+|--------------------------------------------------------------------------
+| Defines the structure of a single chat message.
+|--------------------------------------------------------------------------
+*/
+type Message = {
     id: number,
     text: string,
     me: boolean
-  };
+};
+
+export default function Chat() {
+/*
+|--------------------------------------------------------------------------
+| Bottom tab spacing
+|--------------------------------------------------------------------------
+| Used to prevent the input area from overlapping
+| with the bottom navigation bar.
+|--------------------------------------------------------------------------
+ */
+  const [message, setMessage] = useState("");
+
+/*
+|--------------------------------------------------------------------------
+| Bottom tab spacing
+|--------------------------------------------------------------------------
+| Used to prevent the input area from overlapping
+| with the bottom navigation bar.
+|--------------------------------------------------------------------------
+*/
+  const tabBarHeight = useBottomTabBarHeight();
 
 
+/*
+|--------------------------------------------------------------------------
+| Mock chat data
+|--------------------------------------------------------------------------
+| Simulates a conversation before backend integration.
+|--------------------------------------------------------------------------
+*/
   const [messages, setMessages] = useState<Message[]>([
     { id: 1, text: "Hey, lernen wir morgen?", me: false },
     { id: 2, text: "Ja passt!", me: true },
     { id: 3, text: "Welche Uhrzeit?", me: false },
   ]);
-  
+
+/*
+|--------------------------------------------------------------------------
+| Mock automated replies
+|--------------------------------------------------------------------------
+| Temporary simulated bot responses used to imitate
+| an active chat conversation.
+|--------------------------------------------------------------------------
+*/
   const botReplies = [
     "Alright",
     "For sure",
@@ -42,7 +84,14 @@ export default function Chat() {
     "Cool",
   ];
 
-  
+/*
+|--------------------------------------------------------------------------
+| Delete message
+|--------------------------------------------------------------------------
+| Triggered when the user long presses a message bubble.
+| Opens a confirmation alert before removing the message.
+|--------------------------------------------------------------------------
+*/
   const deleteMessage = (id: number) => {
     Alert.alert("Delete message?", "", [
       { text: "Cancel", style: "cancel" },
@@ -55,21 +104,48 @@ export default function Chat() {
       },
     ]);
   };
-    
+
+/*
+|--------------------------------------------------------------------------
+| Generate random bot reply
+|--------------------------------------------------------------------------
+| Returns a random message from the botReplies array.
+|--------------------------------------------------------------------------
+*/
   const getRandomReply = () => {
     return botReplies[Math.floor(Math.random() * botReplies.length)];
   };
+
+/*
+|--------------------------------------------------------------------------
+| Send message
+|--------------------------------------------------------------------------
+| Adds the user's message to the chat history
+| and simulates an automated reply after a short delay.
+|--------------------------------------------------------------------------
+*/
   const sendMessage = () => {
+
+      /* Prevent sending empty messages */
     if (!message.trim()) return;
 
+      /* Create new user message */
     const newMsg = {
       id: Date.now(),
       text: message,
       me: true,
     };
+
+      /* Add user message to chat */
     setMessages((prev) => [...prev, newMsg]);
+
+      /* Clear input field */
     setMessage("");
 
+      /*
+        Simulated delayed reply
+        to imitate real-time conversation.
+      */
     setTimeout(() =>{
       const reply = {
         id: Date.now() + 1,
@@ -81,12 +157,22 @@ export default function Chat() {
   };
 
   return (
+      /*
+        |--------------------------------------------------------------------------
+        | KeyboardAvoidingView
+        |--------------------------------------------------------------------------
+        | Prevents the keyboard from covering the message input field.
+        |--------------------------------------------------------------------------
+       */
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Screen style={{ flex: 1 }}>
-        
+
+          {/* -------------------------------------------------------------- */}
+          {/* Header Section                                                 */}
+          {/* -------------------------------------------------------------- */}
         <View
             style={{
               flexDirection: "row",
@@ -94,6 +180,8 @@ export default function Chat() {
               marginBottom: 20,
             }}
           >
+
+            {/* Back navigation button */}
             <TouchableOpacity
               onPress={() => router.back()}
               style={{
@@ -104,6 +192,7 @@ export default function Chat() {
               <Ionicons name="chevron-back" size={28} color={COLORS.text} />
             </TouchableOpacity>
 
+            {/* Screen title */}
             <Text
               style={{
                 color: COLORS.text,
@@ -115,6 +204,9 @@ export default function Chat() {
             </Text>
           </View>
 
+          {/* -------------------------------------------------------------- */}
+          {/* Messages List                                                  */}
+          {/* -------------------------------------------------------------- */}
         <FlatList
           style={{ flex: 1 }}
           contentContainerStyle={{ paddingBottom: 0 }}
@@ -122,24 +214,43 @@ export default function Chat() {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
+
+                /* Delete message on long press */
               onLongPress={() => deleteMessage(item.id)}
+
               activeOpacity={0.7}
               style={{
+
+                  /*
+                  Align own messages right
+                  and received messages left.
+                  */
                 alignSelf: item.me ? "flex-end" : "flex-start",
+
+                  /*
+                  Different colors for
+                  sent vs received messages.
+                  */
                 backgroundColor: item.me ? COLORS.primary : COLORS.card,
+
                 padding: 16,
                 borderRadius: 20,
                 marginBottom: 14,
                 maxWidth: "80%",
               }}
             >
+
+                {/* Message text */}
               <Text style={{ color: COLORS.text }}>
                 {item.text}
               </Text>
             </TouchableOpacity>
           )}
         />
-  
+
+          {/* -------------------------------------------------------------- */}
+          {/* Message Input Section                                          */}
+          {/* -------------------------------------------------------------- */}
         <View
           style={{
             flexDirection: "row",
@@ -148,6 +259,8 @@ export default function Chat() {
             paddingBottom: tabBarHeight - 10
           }}
         >
+
+            {/* Text input */}
           <TextInput
             value={message}
             onChangeText={setMessage}
@@ -162,8 +275,9 @@ export default function Chat() {
              
             }}
           />
-          
-  
+
+
+            {/* Send button */}
           <TouchableOpacity
             onPress={sendMessage}
             style={{

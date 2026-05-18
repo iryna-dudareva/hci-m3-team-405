@@ -12,35 +12,71 @@ import { COLORS, SHADOWS } from '@/constants/theme';
 
 export default function ProfileScreen() {
   return (
+      /*
+      |--------------------------------------------------------------------------
+      | Main scroll container
+      |--------------------------------------------------------------------------
+      | Allows vertical scrolling for the profile screen content.
+      | Scroll indicator is hidden for a cleaner UI experience.
+      |--------------------------------------------------------------------------
+      */
     <ScrollView
       style={styles.container}
       showsVerticalScrollIndicator={false}
     >
+      {/* ------------------------------------------------------------------ */}
+      {/* Screen Title                                                       */}
+      {/* ------------------------------------------------------------------ */}
       <Text style={styles.title}>
         Profile
       </Text>
 
+      {/* ------------------------------------------------------------------ */}
+      {/* Main Profile Card                                                  */}
+      {/* ------------------------------------------------------------------ */}
+      {/*
+        Displays the user's main profile information:
+        - Avatar
+        - Name
+        - Subject
+        - Short biography
+      */}
       <View style={styles.profileCard}>
+
+        {/* User avatar placeholder */}
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>
             T
           </Text>
         </View>
 
+        {/* User name */}
         <Text style={styles.name}>
           {profile.name}
         </Text>
 
+        {/* Study subject / field */}
         <Text style={styles.subject}>
           {profile.subject}
         </Text>
 
+        {/* Short user biography */}
         <Text style={styles.bio}>
           {profile.bio}
         </Text>
       </View>
 
+      {/* ------------------------------------------------------------------ */}
+      {/* User Statistics Section                                            */}
+      {/* ------------------------------------------------------------------ */}
+      {/*
+        Displays quick profile statistics such as:
+        - Current learning streak
+        - Number of study matches
+      */}
       <View style={styles.statsContainer}>
+
+        {/* Streak card */}
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>
             🔥 {profile.streak}
@@ -51,6 +87,7 @@ export default function ProfileScreen() {
           </Text>
         </View>
 
+        {/* Match count card */}
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>
             ⭐ {profile.matches}
@@ -62,12 +99,17 @@ export default function ProfileScreen() {
         </View>
       </View>
 
+      {/* ------------------------------------------------------------------ */}
+      {/* Personal Information Section                                       */}
+      {/* ------------------------------------------------------------------ */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>
           Personal Information
         </Text>
 
         <View style={styles.infoCard}>
+
+          {/* Email information */}
           <Text style={styles.infoLabel}>
             Email
           </Text>
@@ -76,8 +118,10 @@ export default function ProfileScreen() {
             {profile.email}
           </Text>
 
+          {/* Divider between info fields */}
           <View style={styles.divider} />
 
+          {/* University information */}
           <Text style={styles.infoLabel}>
             University
           </Text>
@@ -88,6 +132,13 @@ export default function ProfileScreen() {
         </View>
       </View>
 
+      {/* ------------------------------------------------------------------ */}
+      {/* Interests Section                                                  */}
+      {/* ------------------------------------------------------------------ */}
+      {/*
+        Dynamically renders all interests from the profile data
+        as reusable interest tags.
+      */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>
           Interests
@@ -107,19 +158,25 @@ export default function ProfileScreen() {
         </View>
       </View>
 
+      {/* ------------------------------------------------------------------ */}
+      {/* Settings & Logout Actions                                          */}
+      {/* ------------------------------------------------------------------ */}
       <View style={styles.section}>
+
+        {/* Settings button */}
         <TouchableOpacity
-          style={styles.settingsButton}
-          activeOpacity={0.8}
+            style={styles.settingsButton}
+            activeOpacity={0.8}
         >
           <Text style={styles.settingsText}>
             Settings
           </Text>
         </TouchableOpacity>
 
+        {/* Logout button */}
         <TouchableOpacity
-          style={styles.logoutButton}
-          activeOpacity={0.8}
+            style={styles.logoutButton}
+            activeOpacity={0.8}
         >
           <Text style={styles.logoutText}>
             Logout
@@ -127,11 +184,19 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
+      {/* Extra bottom spacing for tab navigation */}
       <View style={{ height: 120 }} />
     </ScrollView>
   );
 }
 
+/*
+|--------------------------------------------------------------------------
+| Styles
+|--------------------------------------------------------------------------
+| Centralized styling for the ProfileScreen component.
+|--------------------------------------------------------------------------
+*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,

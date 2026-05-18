@@ -8,6 +8,14 @@ import Screen from "@/components/ui/Screen";
 
 import { users } from "@/data/users";
 
+
+/*
+|--------------------------------------------------------------------------
+| Match user type
+|--------------------------------------------------------------------------
+| Defines the structure of a user profile shown in the matchmaking system.
+|--------------------------------------------------------------------------
+*/
 type MatchUser = {
   id: number;
   name: string;
@@ -21,26 +29,71 @@ type MatchUser = {
   languages: string;
 };
 
+/*
+|--------------------------------------------------------------------------
+| Device dimensions
+|--------------------------------------------------------------------------
+| Used to dynamically size swipe cards for different screen sizes.
+|--------------------------------------------------------------------------
+*/
 const { width, height } = Dimensions.get("window");
 
 export default function MatchScreen() {
+
+  /* Router for navigation between app screens */
   const router = useRouter();
+
+  /*
+ |--------------------------------------------------------------------------
+ | State management
+ |--------------------------------------------------------------------------
+ | matchedUsers -> stores successful matches
+ | showMatches -> controls match overlay visibility
+ | swiped -> tracks how many cards were already reviewed
+ |--------------------------------------------------------------------------
+ */
   const [matchedUsers, setMatchedUsers] = useState<MatchUser[]>([]);
   const [showMatches, setShowMatches] = useState(true);
   const [swiped, setSwiped] = useState(0);
 
+  /*
+ |--------------------------------------------------------------------------
+ | Store successful matches
+ |--------------------------------------------------------------------------
+ | Triggered when a profile is swiped right.
+ | Adds the user to the matches list if not already matched.
+ |--------------------------------------------------------------------------
+ */
   const storeMatch = (cardIndex: number) => {
     const newMatch = users[cardIndex];
+
     if (!newMatch) return;
+
+    /* Increase reviewed/swiped profile counter */
     setSwiped((prev) => prev + 1);
+
+    /*
+      Prevent duplicate matches by checking if the user
+      already exists in the matchedUsers array.
+    */
     setMatchedUsers((current) =>
       current.some((user) => user.id === newMatch.id)
         ? current
         : [...current, newMatch],
     );
+
+    /* Automatically open match overview */
     setShowMatches(true);
   };
 
+
+  /*
+  |--------------------------------------------------------------------------
+  | Navigate to chat screen
+  |--------------------------------------------------------------------------
+  | Opens a chat with the selected matched user.
+  |--------------------------------------------------------------------------
+  */
   const startChat = (user: MatchUser) => {
     router.push(
       `/chat?name=${encodeURIComponent(user.name)}&id=${user.id}`,
@@ -48,14 +101,23 @@ export default function MatchScreen() {
   };
 
   return (
-    <Screen>
+    <Screen showsVerticalScrollIndicator={false}>
       <>
+        {/* -------------------------------------------------------------- */}
+        {/* Screen Title                                                   */}
+        {/* -------------------------------------------------------------- */}
         <Text style={styles.title}>Find your Study Buddy</Text>
+
+        {/* -------------------------------------------------------------- */}
+        {/* Intro / Header Section                                         */}
+        {/* -------------------------------------------------------------- */}
         {!(matchedUsers.length > 0 && showMatches) ? (
           <View style={styles.headerSection}>
             <Text style={styles.subtitle}>
               Your matches appear here and you can start a chat directly.
             </Text>
+
+            {/* Button only appears when matches exist */}
             {matchedUsers.length > 0 && !showMatches ? (
               <Pressable
                 style={styles.viewMatchesButton}
@@ -69,6 +131,13 @@ export default function MatchScreen() {
           </View>
         ) : null}
 
+        {/* -------------------------------------------------------------- */}
+        {/* Match Overlay                                                  */}
+        {/* -------------------------------------------------------------- */}
+        {/*
+          Displays all matched users as interactive chips.
+          Clicking a chip immediately opens the chat screen.
+        */}
         {matchedUsers.length > 0 && showMatches ? (
           <View style={styles.matchOverlay}>
             <View style={styles.matchOverlayTop}>
@@ -82,6 +151,8 @@ export default function MatchScreen() {
                 <Text style={styles.closeButtonText}>Close</Text>
               </Pressable>
             </View>
+
+            {/* Matched user chips */}
             <View style={styles.matchChips}>
               {matchedUsers.map((user) => (
                 <Pressable
@@ -97,12 +168,21 @@ export default function MatchScreen() {
           </View>
         ) : null}
 
+        {/* -------------------------------------------------------------- */}
+        {/* Empty State Hint                                               */}
+        {/* -------------------------------------------------------------- */}
         {matchedUsers.length === 0 ? (
           <Text style={styles.emptyHint}>
             Swipe right to match new study buddies.
           </Text>
         ) : null}
 
+        {/* -------------------------------------------------------------- */}
+        {/* End Screen                                                     */}
+        {/* -------------------------------------------------------------- */}
+        {/*
+          Displayed when all profiles have been swiped.
+        */}
         {swiped >= users.length ? (
           <View style={styles.endContainer}>
             <Text style={styles.endTitle}>All profiles reviewed!</Text>
@@ -110,6 +190,8 @@ export default function MatchScreen() {
               You`&apos;`ve gone through all available study buddies. Check back later
               for new profiles or reach out to your matches.
             </Text>
+
+            {/* Show matches button */}
             {matchedUsers.length > 0 ? (
               <Pressable
                 style={styles.viewMatchesButtonLarge}
@@ -123,12 +205,29 @@ export default function MatchScreen() {
           </View>
         ) : null}
 
+        {/* -------------------------------------------------------------- */}
+        {/* Swipe Card Stack                                               */}
+        {/* -------------------------------------------------------------- */}
+        {/*
+          Main matchmaking interaction.
+          Users swipe:
+          - Left -> pass
+          - Right -> match
+        */}
         {swiped < users.length ? (
           <View style={styles.container}>
             <Swiper
+
+                /* All available user profiles */
               cards={users}
+
+                /* Renders each swipe card */
               renderCard={(card) => (card ? <MatchCard user={card} /> : <View />)}
+
+                /* Called when swiping right */
               onSwipedRight={storeMatch}
+
+                /* Swiper behavior configuration */
               stackSize={1}
               backgroundColor="transparent"
               animateCardOpacity
@@ -138,8 +237,18 @@ export default function MatchScreen() {
               verticalSwipe={false}
               cardVerticalMargin={0}
               cardHorizontalMargin={0}
+
+                /* Rotation effect while swiping */
               outputRotationRange={["-8deg", "0deg", "8deg"]}
 
+                /*
+               --------------------------------------------------------------
+               | Swipe overlay labels
+               --------------------------------------------------------------
+               | PASS  -> left swipe
+               | MATCH -> right swipe
+               --------------------------------------------------------------
+               */
               overlayLabels={{
                 left: {
                   title: "PASS",
@@ -188,12 +297,14 @@ export default function MatchScreen() {
                 },
               }}
 
+                /* Swiper container styling */
               containerStyle={{
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "center",
               }}
 
+                /* Individual card sizing */
               cardStyle={{
                 width: width * 0.92,
                 height: height * 0.72,
@@ -207,6 +318,14 @@ export default function MatchScreen() {
     </Screen>
   );
 }
+
+/*
+|--------------------------------------------------------------------------
+| Styles
+|--------------------------------------------------------------------------
+| Centralized styling for the MatchScreen component.
+|--------------------------------------------------------------------------
+*/
 
 const styles = StyleSheet.create({
   container: {

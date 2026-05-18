@@ -8,7 +8,14 @@ import { router } from 'expo-router';
 
 import { COLORS, SHADOWS } from '@/constants/theme';
 
-
+/*
+|--------------------------------------------------------------------------
+| Component Props
+|--------------------------------------------------------------------------
+| name    -> name of the chat partner
+| message -> latest chat preview message
+|--------------------------------------------------------------------------
+*/
 
 type Props = {
   name: string;
@@ -20,21 +27,41 @@ export default function ChatPreviewCard({
   message,
 }: Props) {
   return (
+
+      /*
+      |--------------------------------------------------------------------------
+      | Chat preview card
+      |--------------------------------------------------------------------------
+      | Displays a compact preview of a recent conversation.
+      | Clicking the card navigates to the chat screen.
+      |--------------------------------------------------------------------------
+      */
     <TouchableOpacity
       style={styles.card}
       activeOpacity={0.8}
       onPress={() => router.push('/chat')}
     >
+
+      {/* Chat partner name */}
       <Text style={styles.name}>
         {name}
       </Text>
 
+      {/* Last message preview */}
       <Text style={styles.message}>
         {message}
       </Text>
     </TouchableOpacity>
   );
 }
+
+/*
+|--------------------------------------------------------------------------
+| Styles
+|--------------------------------------------------------------------------
+| Centralized styling for the ChatPreviewCard component.
+|--------------------------------------------------------------------------
+*/
 
 const styles = StyleSheet.create({
   card: {
