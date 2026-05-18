@@ -63,7 +63,7 @@ export default function Calendar() {
       <FilterBar active={filter} setActive={setFilter} subjects={subjects} onAddSubject={addSubject} />
       
         <Pressable onPress={() => setModalVisible(true)} style={{ backgroundColor: COLORS.primary, padding: 14, borderRadius: 14, marginBottom: 12, }}>
-          <Text  style={{ color: "#fff", fontWeight: "700" }}> + Add Study Sesh</Text>
+          <Text  style={{ color: "#fff", fontWeight: "700" }}> + Add Study Session</Text>
         </Pressable>
 
       <FlatList data={filteredEvents} keyExtractor={(item) => item.id.toString()} renderItem={({ item }) => <StudyEventCard event={item} />} />
