@@ -1,8 +1,13 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { StudyEvent } from "@/types/study";
 import { COLORS } from "@/constants/theme";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function StudyEventCard({ event }: { event: StudyEvent }) {
+export default function StudyEventCard({ event, onEdit }:
+    {
+        event: StudyEvent,
+        onEdit: (event: StudyEvent) => void;
+     }) {
 
     const dateObj = new Date(event.timestamp);
 
@@ -18,7 +23,15 @@ export default function StudyEventCard({ event }: { event: StudyEvent }) {
     });
     return (
         <View style={styles.card}>
-            <Text style={styles.title}>{event.title}</Text>
+
+            <View style={styles.row}>
+                <Text style={styles.title}>{event.title}</Text>
+
+                <Pressable onPress={() => onEdit(event)}>
+                    <Ionicons name="pencil-outline" size={18} color={COLORS.subtext} />
+                </Pressable>
+            </View>
+            
             <Text style={styles.text} >
                 {event.subject} • {formattedDate} • {formattedTime}
             </Text>
@@ -41,5 +54,10 @@ const styles = StyleSheet.create({
     text: {
         color: COLORS.subtext,
         marginTop: 6,
+    },
+    row: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
 });

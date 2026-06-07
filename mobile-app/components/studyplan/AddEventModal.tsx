@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { COLORS } from "@/constants/theme";
 import { StudyEvent } from "@/types/study";
@@ -7,11 +7,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 
 export default function AddEventModal({
-    visible, onClose, onAdd,
+    visible, onClose, onAdd, editEvent, onUpdate
 }: {
     visible: boolean;
     onClose: () => void;
     onAdd: (event: StudyEvent) => void;
+    editEvent: StudyEvent | null;
+    onUpdate: (event: StudyEvent) => void;
     }) {
     const [title, setTitle] = useState("");
     const [subject, setSubject] = useState("");
@@ -20,6 +22,20 @@ export default function AddEventModal({
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
+    useEffect(() => {
+        if (editEvent) {
+            setTitle(editEvent.title);
+            setSubject(editEvent.subject);
+            setDate(editEvent.date);
+            setTime(editEvent.time);
+        } else {
+            setTitle("");
+            setSubject("");
+            setDate("");
+            setTime("");
+        }
+    }, [editEvent, visible]);
+
     const handleAdd = () => {
         if (!title || !subject || !date || !time) return;
 
@@ -27,19 +43,20 @@ export default function AddEventModal({
 
         if (isNaN(timestamp)) return;
 
-        onAdd({
-            id: Date.now(),
+        const updatedEvent: StudyEvent = {
+            id: editEvent ? editEvent.id : Date.now(),
             title,
             subject,
             date,
             time,
             timestamp,
-        });
+        };
 
-        setTitle("");
-        setSubject("");
-        setDate("");
-        setTime("");
+        if (editEvent) {
+            onUpdate(updatedEvent);
+        } else {
+            onAdd(updatedEvent);
+        }
 
 
         onClose();
@@ -49,7 +66,7 @@ export default function AddEventModal({
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.overlay}>
                 <View style={styles.modal}>
-                    <Text style={styles.title}> New Study Event</Text>
+                    <Text style={styles.title}> {editEvent ? "Edit Study Event" : "New Study Event"}</Text>
 
                     <TextInput placeholder="Title"  placeholderTextColor={COLORS.subtext} value={title} onChangeText={setTitle} style={styles.input} />
                     <TextInput placeholder="Subject"  placeholderTextColor={COLORS.subtext} value={subject} onChangeText={setSubject} style={styles.input} />
@@ -76,7 +93,7 @@ export default function AddEventModal({
                     <TextInput placeholder="Time (HH:MM)"  placeholderTextColor={COLORS.subtext} value={time} onChangeText={setTime} style={styles.input} />
                     
                     <Pressable onPress={handleAdd} style={styles.button}>
-                        <Text style={styles.buttonText}>Add Event</Text>
+                        <Text style={styles.buttonText}>{editEvent ? "Update Event" : "Add Event"}</Text>
                     </Pressable>
 
 
