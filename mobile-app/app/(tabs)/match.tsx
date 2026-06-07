@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text, View, ScrollView} from "react-native";
 import Swiper from "react-native-deck-swiper";
 
 import MatchCard from "@/components/MatchCard";
@@ -8,6 +8,7 @@ import Screen from "@/components/ui/Screen";
 
 import { users } from "@/data/users";
 import { User } from "@/types/user";
+import { COLORS } from "@/constants/theme";
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +34,11 @@ export default function MatchScreen() {
  |--------------------------------------------------------------------------
  */
   const [matchedUsers, setMatchedUsers] = useState<User[]>([]);
+  const [passedUsers, setPassedUsers] = useState<number[]>([]);
   const [showMatches, setShowMatches] = useState(true);
   const [swiped, setSwiped] = useState(0);
-
+  const [selectedSubject, setSelectedSubject] = useState("All");
+  const [showAllSubjects, setShowAllSubjects] = useState(false);
   /*
  |--------------------------------------------------------------------------
  | Store successful matches
@@ -45,7 +48,7 @@ export default function MatchScreen() {
  |--------------------------------------------------------------------------
  */
   const storeMatch = (cardIndex: number) => {
-    const newMatch = users[cardIndex];
+    const newMatch = filteredUsers[cardIndex];
 
     if (!newMatch) return;
 
@@ -64,6 +67,8 @@ export default function MatchScreen() {
 
     /* Automatically open match overview */
     setShowMatches(true);
+
+    setSelectedSubject("All");
   };
 
 
@@ -80,6 +85,27 @@ export default function MatchScreen() {
     );
   };
 
+  const subjects = ["All", ...new Set(users.map((u) => u.subject))];
+
+  
+
+
+  const availableUsers = users.filter(
+    (u) =>
+      !matchedUsers.some((m) => m.id === u.id) &&
+      !passedUsers.includes(u.id)
+  );
+
+  const filteredUsers = selectedSubject === "All"
+    ? availableUsers
+    : availableUsers.filter((u) => u.subject === selectedSubject);
+
+  const swiperKey = selectedSubject + "_" + matchedUsers.length + "_" + passedUsers.length; //from Chatgpt due to logic errors without this line
+
+  const isFilterActive = selectedSubject !== "All";
+  const isEmptyInFilter = isFilterActive && filteredUsers.length === 0;
+  const isEmptyGlobal = !isFilterActive && filteredUsers.length === 0;
+
   return (
     <Screen showsVerticalScrollIndicator={false}>
       <>
@@ -87,6 +113,29 @@ export default function MatchScreen() {
         {/* Screen Title                                                   */}
         {/* -------------------------------------------------------------- */}
         <Text style={styles.title}>Find your Study Buddy</Text>
+        {/*The usage of ScrollView to solve the spacing issue comes from Chatgpt*/ }
+        <View style={{marginTop: 2, marginBottom: 4}}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={filterStyles.fcontainer}>  
+            {(showAllSubjects
+              ? subjects
+              : subjects.slice(0, 3)
+            ).map((sub) => (
+              <Pressable key={sub} onPress={() => setSelectedSubject(sub)} style={[filterStyles.chip, selectedSubject === sub && filterStyles.chipActive]}>
+                <Text style={[filterStyles.text, selectedSubject === sub && filterStyles.textActive,]}>
+                  {sub.length > 18 ? sub.slice(0,18) + "..." : sub}
+                </Text>
+              </Pressable>
+            ))}
+
+            {subjects.length > 3 && (
+              <Pressable onPress={() => setShowAllSubjects((prev) => !prev)} style={filterStyles.moreButton}>
+                <Text style={filterStyles.moreBText } >
+                  { showAllSubjects? "Less": "More" }
+                  </Text>
+              </Pressable>
+            )}
+            </ScrollView>
+        </View>
 
         {/* -------------------------------------------------------------- */}
         {/* Intro / Header Section                                         */}
@@ -184,6 +233,7 @@ export default function MatchScreen() {
             ) : null}
           </View>
         ) : null}
+        
 
         {/* -------------------------------------------------------------- */}
         {/* Swipe Card Stack                                               */}
@@ -194,20 +244,47 @@ export default function MatchScreen() {
           - Left -> pass
           - Right -> match
         */}
-        {swiped < users.length ? (
+        {isEmptyInFilter ? (
+          <View style={fallbackStyles.emptyFContainer}>
+            <Text style={fallbackStyles.emptyFTitle}> No more Users in current subject</Text>
+            <Text style={fallbackStyles.emptyFText}> Try switching to another subject or reset filter</Text>
+            <Pressable onPress={() => setSelectedSubject("All")} style={fallbackStyles.resetButton}>
+              <Text style={fallbackStyles.resetBText}> Reset to all users</Text>
+            </Pressable>
+
+          </View>) : isEmptyGlobal ? (
+              <View style={fallbackStyles.emptyFContainer}>
+                <Text style={fallbackStyles.emptyFTitle}> No Users Found</Text>
+                <Text style={fallbackStyles.emptyFText}> You have swiped through all available study buddies</Text>
+                <Pressable onPress={() => setSelectedSubject("All")} style={fallbackStyles.resetButton}>
+                  <Text style={fallbackStyles.resetBText}> Show all users</Text>
+                </Pressable>
+
+          </View>
+          ): (
           <View style={styles.container}>
             <Swiper
+              key={swiperKey}
+              /* All available user profiles */
+              cards={filteredUsers}
 
-                /* All available user profiles */
-              cards={users}
-
-                /* Renders each swipe card */
+              /* Renders each swipe card */
               renderCard={(card) => (card ? <MatchCard user={card} /> : <View />)}
 
-                /* Called when swiping right */
+              /* Called when swiping right */
               onSwipedRight={storeMatch}
+              onSwipedLeft={(cardIndex) => {
+                const user = filteredUsers[cardIndex];
+                if (!user) return;
 
-                /* Swiper behavior configuration */
+                setPassedUsers((prev) =>
+                  prev.includes(user.id)
+                    ? prev
+                    : [...prev, user.id],
+                );
+              }}
+
+              /* Swiper behavior configuration */
               stackSize={1}
               backgroundColor="transparent"
               animateCardOpacity
@@ -218,17 +295,17 @@ export default function MatchScreen() {
               cardVerticalMargin={0}
               cardHorizontalMargin={0}
 
-                /* Rotation effect while swiping */
+              /* Rotation effect while swiping */
               outputRotationRange={["-8deg", "0deg", "8deg"]}
 
-                /*
-               --------------------------------------------------------------
-               | Swipe overlay labels
-               --------------------------------------------------------------
-               | PASS  -> left swipe
-               | MATCH -> right swipe
-               --------------------------------------------------------------
-               */
+              /*
+             --------------------------------------------------------------
+             | Swipe overlay labels
+             --------------------------------------------------------------
+             | PASS  -> left swipe
+             | MATCH -> right swipe
+             --------------------------------------------------------------
+             */
               overlayLabels={{
                 left: {
                   title: "PASS",
@@ -277,14 +354,14 @@ export default function MatchScreen() {
                 },
               }}
 
-                /* Swiper container styling */
+              /* Swiper container styling */
               containerStyle={{
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "center",
               }}
 
-                /* Individual card sizing */
+              /* Individual card sizing */
               cardStyle={{
                 width: width * 0.92,
                 height: height * 0.72,
@@ -293,7 +370,7 @@ export default function MatchScreen() {
               }}
             />
           </View>
-        ) : null}
+        )}
       </>
     </Screen>
   );
@@ -376,7 +453,7 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: "800",
     color: "#111",
-    marginTop: 10,
+    marginTop: 4,
     marginBottom: 8,
     letterSpacing: -1,
   },
@@ -447,7 +524,7 @@ const styles = StyleSheet.create({
 
   headerSection: {
     width: "100%",
-    marginBottom: 16,
+    marginBottom: 4,
   },
 
   viewMatchesButton: {
@@ -500,5 +577,84 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
     fontSize: 16,
+  },
+});
+
+const filterStyles = StyleSheet.create({
+  fcontainer: {
+    flexDirection: "row",
+    alignItems: "stretch",
+    paddingVertical: 4,
+  },
+  chip: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 18,
+    backgroundColor: COLORS.card,
+    marginRight: 8,
+    marginBottom: 8,
+
+  },
+  chipActive: {
+    backgroundColor: COLORS.primary,
+  },
+  text: {
+    color: COLORS.text,
+    fontWeight: "600",
+    fontSize: 14,
+  },
+  textActive: {
+    color: "#fff",
+  },
+  moreButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 18,
+    backgroundColor: COLORS.primary,
+    marginRight: 8,
+    marginBottom: 8,
+
+  },
+  moreBText: {
+    color: "#fff",
+    alignItems: "center",
+    fontSize: 14,
+  },
+
+});
+
+
+const fallbackStyles = StyleSheet.create({
+  emptyFContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    marginTop: 40,
+  },
+  emptyFTitle: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: COLORS.text,
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  emptyFText: {
+    fontSize: 14,
+    color: COLORS.subtext,
+    marginBottom: 18,
+    textAlign: "center",
+    lineHeight: 20,
+  },
+  resetButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 14,
+    backgroundColor: COLORS.primary,
+  },
+  resetBText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 14,
   },
 });
