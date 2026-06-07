@@ -7,27 +7,7 @@ import MatchCard from "@/components/MatchCard";
 import Screen from "@/components/ui/Screen";
 
 import { users } from "@/data/users";
-
-
-/*
-|--------------------------------------------------------------------------
-| Match user type
-|--------------------------------------------------------------------------
-| Defines the structure of a user profile shown in the matchmaking system.
-|--------------------------------------------------------------------------
-*/
-type MatchUser = {
-  id: number;
-  name: string;
-  subject: string;
-  bio: string;
-  image: string;
-  age: number;
-  location: string;
-  studyStyle: string;
-  availability: string;
-  languages: string;
-};
+import { User } from "@/types/user";
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +32,7 @@ export default function MatchScreen() {
  | swiped -> tracks how many cards were already reviewed
  |--------------------------------------------------------------------------
  */
-  const [matchedUsers, setMatchedUsers] = useState<MatchUser[]>([]);
+  const [matchedUsers, setMatchedUsers] = useState<User[]>([]);
   const [showMatches, setShowMatches] = useState(true);
   const [swiped, setSwiped] = useState(0);
 
@@ -94,7 +74,7 @@ export default function MatchScreen() {
   | Opens a chat with the selected matched user.
   |--------------------------------------------------------------------------
   */
-  const startChat = (user: MatchUser) => {
+  const startChat = (user: User) => {
     router.push(
       `/chat?name=${encodeURIComponent(user.name)}&id=${user.id}`,
     );

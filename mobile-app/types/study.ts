@@ -4,4 +4,6 @@ export type StudyEvent = {
     subject: string;
     date: string; 
     time: string;
+
+    timestamp: number;
 };
