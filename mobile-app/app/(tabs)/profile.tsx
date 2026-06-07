@@ -35,287 +35,287 @@ export default function ProfileScreen() {
       | Scroll indicator is hidden for a cleaner UI experience.
       |--------------------------------------------------------------------------
       */
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* ------------------------------------------------------------------ */}
-      {/* Screen Title                                                       */}
-      {/* ------------------------------------------------------------------ */}
-      <Text style={styles.title}>
-        Profile
-      </Text>
+      <ScrollView
+          style={styles.container}
+          showsVerticalScrollIndicator={false}
+      >
+        {/* ------------------------------------------------------------------ */}
+        {/* Screen Title                                                       */}
+        {/* ------------------------------------------------------------------ */}
+        <Text style={styles.title}>
+          Profile
+        </Text>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Main Profile Card                                                  */}
-      {/* ------------------------------------------------------------------ */}
-      {/*
+        {/* ------------------------------------------------------------------ */}
+        {/* Main Profile Card                                                  */}
+        {/* ------------------------------------------------------------------ */}
+        {/*
         Displays the user's main profile information:
         - Avatar
         - Name
         - Subject
         - Short biography
       */}
-      <View style={styles.profileCard}>
+        <View style={styles.profileCard}>
 
-        {/* User avatar placeholder */}
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            T
+          {/* User avatar placeholder */}
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              T
+            </Text>
+          </View>
+
+          {/* User name */}
+          <Text style={styles.name}>
+            {userProfile.name}
+          </Text>
+
+          {/* Study subject / field */}
+          <Text style={styles.subject}>
+            {userProfile.subject}
+          </Text>
+
+          {/* Short user biography */}
+          <Text style={styles.bio}>
+            {userProfile.bio}
           </Text>
         </View>
 
-        {/* User name */}
-        <Text style={styles.name}>
-          {userProfile.name}
-        </Text>
-
-        {/* Study subject / field */}
-        <Text style={styles.subject}>
-          {userProfile.subject}
-        </Text>
-
-        {/* Short user biography */}
-        <Text style={styles.bio}>
-          {userProfile.bio}
-        </Text>
-      </View>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* User Statistics Section                                            */}
-      {/* ------------------------------------------------------------------ */}
-      {/*
+        {/* ------------------------------------------------------------------ */}
+        {/* User Statistics Section                                            */}
+        {/* ------------------------------------------------------------------ */}
+        {/*
         Displays quick profile statistics such as:
         - Current learning streak
         - Number of study matches
       */}
-      <View style={styles.statsContainer}>
+        <View style={styles.statsContainer}>
 
-        {/* Streak card */}
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            🔥 {profile.streak}
-          </Text>
+          {/* Streak card */}
+          <View style={styles.statCard}>
+            <Text style={styles.statNumber}>
+              🔥 {profile.streak}
+            </Text>
 
-          <Text style={styles.statLabel}>
-            Day Streak
-          </Text>
+            <Text style={styles.statLabel}>
+              Day Streak
+            </Text>
+          </View>
+
+          {/* Match count card */}
+          <View style={styles.statCard}>
+            <Text style={styles.statNumber}>
+              ⭐ {profile.matches}
+            </Text>
+
+            <Text style={styles.statLabel}>
+              Study Matches
+            </Text>
+          </View>
         </View>
 
-        {/* Match count card */}
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            ⭐ {profile.matches}
+        {/* ------------------------------------------------------------------ */}
+        {/* Personal Information Section                                       */}
+        {/* ------------------------------------------------------------------ */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            Personal Information
           </Text>
 
-          <Text style={styles.statLabel}>
-            Study Matches
-          </Text>
+          <View style={styles.infoCard}>
+
+            {/* Email information */}
+            <Text style={styles.infoLabel}>
+              Email
+            </Text>
+
+            <Text style={styles.infoValue}>
+              {userProfile.email}
+            </Text>
+
+            {/* Divider between info fields */}
+            <View style={styles.divider} />
+
+            {/* University information */}
+            <Text style={styles.infoLabel}>
+              University
+            </Text>
+
+            <Text style={styles.infoValue}>
+              {userProfile.university}
+            </Text>
+          </View>
         </View>
-      </View>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Personal Information Section                                       */}
-      {/* ------------------------------------------------------------------ */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Personal Information
-        </Text>
-
-        <View style={styles.infoCard}>
-
-          {/* Email information */}
-          <Text style={styles.infoLabel}>
-            Email
-          </Text>
-
-          <Text style={styles.infoValue}>
-            {userProfile.email}
-          </Text>
-
-          {/* Divider between info fields */}
-          <View style={styles.divider} />
-
-          {/* University information */}
-          <Text style={styles.infoLabel}>
-            University
-          </Text>
-
-          <Text style={styles.infoValue}>
-            {userProfile.university}
-          </Text>
-        </View>
-      </View>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Interests Section                                                  */}
-      {/* ------------------------------------------------------------------ */}
-      {/*
+        {/* ------------------------------------------------------------------ */}
+        {/* Interests Section                                                  */}
+        {/* ------------------------------------------------------------------ */}
+        {/*
         Dynamically renders all interests from the profile data
         as reusable interest tags.
       */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Interests
-        </Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            Interests
+          </Text>
 
-        <View style={styles.interestsContainer}>
-          {userProfile.interests.map((interest) => (
-            <View
-              key={interest}
-              style={styles.interestTag}
-            >
-              <Text style={styles.interestText}>
-                {interest}
-              </Text>
-            </View>
-          ))}
+          <View style={styles.interestsContainer}>
+            {userProfile.interests.map((interest) => (
+                <View
+                    key={interest}
+                    style={styles.interestTag}
+                >
+                  <Text style={styles.interestText}>
+                    {interest}
+                  </Text>
+                </View>
+            ))}
+          </View>
         </View>
-      </View>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Settings & Logout Actions                                          */}
-      {/* ------------------------------------------------------------------ */}
-      <View style={styles.section}>
+        {/* ------------------------------------------------------------------ */}
+        {/* Settings & Logout Actions                                          */}
+        {/* ------------------------------------------------------------------ */}
+        <View style={styles.section}>
 
-        {/* Settings button */}
-        <TouchableOpacity
-            style={styles.settingsButton}
-            activeOpacity={0.8}
-            onPress={() => setIsEditing(true)}
-        >
-          <Text style={styles.settingsText}>
-            Settings
-          </Text>
-        </TouchableOpacity>
-
-        {/* Logout button */}
-        <TouchableOpacity
-            style={styles.logoutButton}
-            activeOpacity={0.8}
-            onPress={handleLogout}
-        >
-          <Text style={styles.logoutText}>
-            Logout
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-
-      <Modal
-          visible={isEditing}
-          animationType="slide"
-      >
-        <View
-            style={{
-              flex: 1,
-              backgroundColor: COLORS.background,
-              padding: 24,
-              justifyContent: 'center',
-            }}
-        >
-          <Text
-              style={{
-                fontSize: 28,
-                fontWeight: '700',
-                color: COLORS.text,
-                marginBottom: 24,
-              }}
-          >
-            Edit Profile
-          </Text>
-
-          <TextInput
-              value={userProfile.name}
-              onChangeText={(text) =>
-                  setUserProfile({
-                    ...userProfile,
-                    name: text,
-                  })
-              }
-              placeholder="Name"
-              style={styles.input}
-          />
-
-          <TextInput
-              value={userProfile.subject}
-              onChangeText={(text) =>
-                  setUserProfile({
-                    ...userProfile,
-                    subject: text,
-                  })
-              }
-              placeholder="Subject"
-              style={styles.input}
-          />
-
-          <TextInput
-              value={userProfile.bio}
-              onChangeText={(text) =>
-                  setUserProfile({
-                    ...userProfile,
-                    bio: text,
-                  })
-              }
-              placeholder="Bio"
-              multiline
-              style={[styles.input, { height: 100 }]}
-          />
-
-          <TextInput
-              value={userProfile.email}
-              onChangeText={(text) =>
-                  setUserProfile({
-                    ...userProfile,
-                    email: text,
-                  })
-              }
-              placeholder="Email"
-              style={styles.input}
-          />
-
-          <TextInput
-              value={userProfile.university}
-              onChangeText={(text) =>
-                  setUserProfile({
-                    ...userProfile,
-                    university: text,
-                  })
-              }
-              placeholder="University"
-              style={styles.input}
-          />
-
-          <TextInput
-              value={interestsInput}
-              onChangeText={setInterestsInput}
-              placeholder="Interests"
-              style={styles.input}
-          />
-
+          {/* Settings button */}
           <TouchableOpacity
               style={styles.settingsButton}
-              onPress={() => {
-                setUserProfile({
-                  ...userProfile,
-                  interests: interestsInput
-                      .split(',')
-                      .map((interest) => interest.trim())
-                      .filter(Boolean),
-                });
-
-                setIsEditing(false);
-              }}
+              activeOpacity={0.8}
+              onPress={() => setIsEditing(true)}
           >
             <Text style={styles.settingsText}>
-              Save Changes
+              Settings
+            </Text>
+          </TouchableOpacity>
+
+          {/* Logout button */}
+          <TouchableOpacity
+              style={styles.logoutButton}
+              activeOpacity={0.8}
+              onPress={handleLogout}
+          >
+            <Text style={styles.logoutText}>
+              Logout
             </Text>
           </TouchableOpacity>
         </View>
-      </Modal>
-      {/* Extra bottom spacing for tab navigation */}
-      <View style={{ height: 120 }} />
-    </ScrollView>
+
+
+        <Modal
+            visible={isEditing}
+            animationType="slide"
+        >
+          <View
+              style={{
+                flex: 1,
+                backgroundColor: COLORS.background,
+                padding: 24,
+                justifyContent: 'center',
+              }}
+          >
+            <Text
+                style={{
+                  fontSize: 28,
+                  fontWeight: '700',
+                  color: COLORS.text,
+                  marginBottom: 24,
+                }}
+            >
+              Edit Profile
+            </Text>
+
+            <TextInput
+                value={userProfile.name}
+                onChangeText={(text) =>
+                    setUserProfile({
+                      ...userProfile,
+                      name: text,
+                    })
+                }
+                placeholder="Name"
+                style={styles.input}
+            />
+
+            <TextInput
+                value={userProfile.subject}
+                onChangeText={(text) =>
+                    setUserProfile({
+                      ...userProfile,
+                      subject: text,
+                    })
+                }
+                placeholder="Subject"
+                style={styles.input}
+            />
+
+            <TextInput
+                value={userProfile.bio}
+                onChangeText={(text) =>
+                    setUserProfile({
+                      ...userProfile,
+                      bio: text,
+                    })
+                }
+                placeholder="Bio"
+                multiline
+                style={[styles.input, { height: 100 }]}
+            />
+
+            <TextInput
+                value={userProfile.email}
+                onChangeText={(text) =>
+                    setUserProfile({
+                      ...userProfile,
+                      email: text,
+                    })
+                }
+                placeholder="Email"
+                style={styles.input}
+            />
+
+            <TextInput
+                value={userProfile.university}
+                onChangeText={(text) =>
+                    setUserProfile({
+                      ...userProfile,
+                      university: text,
+                    })
+                }
+                placeholder="University"
+                style={styles.input}
+            />
+
+            <TextInput
+                value={interestsInput}
+                onChangeText={setInterestsInput}
+                placeholder="Interests"
+                style={styles.input}
+            />
+
+            <TouchableOpacity
+                style={styles.settingsButton}
+                onPress={() => {
+                  setUserProfile({
+                    ...userProfile,
+                    interests: interestsInput
+                        .split(',')
+                        .map((interest) => interest.trim())
+                        .filter(Boolean),
+                  });
+
+                  setIsEditing(false);
+                }}
+            >
+              <Text style={styles.settingsText}>
+                Save Changes
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+        {/* Extra bottom spacing for tab navigation */}
+        <View style={{ height: 120 }} />
+      </ScrollView>
   );
 }
 
