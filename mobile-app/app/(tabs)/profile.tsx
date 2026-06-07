@@ -4,13 +4,28 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Modal,
+  TextInput,
 } from 'react-native';
 
 import { profile } from '@/data/profile';
 
 import { COLORS, SHADOWS } from '@/constants/theme';
 
+import { useState } from 'react';
+import { router } from 'expo-router';
+
 export default function ProfileScreen() {
+  const [userProfile, setUserProfile] = useState(profile);
+  const [interestsInput, setInterestsInput] = useState(
+      profile.interests.join(', ')
+  );
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleLogout = () => {
+    router.replace('/login');
+  };
+
   return (
       /*
       |--------------------------------------------------------------------------
@@ -52,17 +67,17 @@ export default function ProfileScreen() {
 
         {/* User name */}
         <Text style={styles.name}>
-          {profile.name}
+          {userProfile.name}
         </Text>
 
         {/* Study subject / field */}
         <Text style={styles.subject}>
-          {profile.subject}
+          {userProfile.subject}
         </Text>
 
         {/* Short user biography */}
         <Text style={styles.bio}>
-          {profile.bio}
+          {userProfile.bio}
         </Text>
       </View>
 
@@ -115,7 +130,7 @@ export default function ProfileScreen() {
           </Text>
 
           <Text style={styles.infoValue}>
-            {profile.email}
+            {userProfile.email}
           </Text>
 
           {/* Divider between info fields */}
@@ -127,7 +142,7 @@ export default function ProfileScreen() {
           </Text>
 
           <Text style={styles.infoValue}>
-            {profile.university}
+            {userProfile.university}
           </Text>
         </View>
       </View>
@@ -145,7 +160,7 @@ export default function ProfileScreen() {
         </Text>
 
         <View style={styles.interestsContainer}>
-          {profile.interests.map((interest) => (
+          {userProfile.interests.map((interest) => (
             <View
               key={interest}
               style={styles.interestTag}
@@ -167,6 +182,7 @@ export default function ProfileScreen() {
         <TouchableOpacity
             style={styles.settingsButton}
             activeOpacity={0.8}
+            onPress={() => setIsEditing(true)}
         >
           <Text style={styles.settingsText}>
             Settings
@@ -177,6 +193,7 @@ export default function ProfileScreen() {
         <TouchableOpacity
             style={styles.logoutButton}
             activeOpacity={0.8}
+            onPress={handleLogout}
         >
           <Text style={styles.logoutText}>
             Logout
@@ -184,6 +201,118 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
+
+      <Modal
+          visible={isEditing}
+          animationType="slide"
+      >
+        <View
+            style={{
+              flex: 1,
+              backgroundColor: COLORS.background,
+              padding: 24,
+              justifyContent: 'center',
+            }}
+        >
+          <Text
+              style={{
+                fontSize: 28,
+                fontWeight: '700',
+                color: COLORS.text,
+                marginBottom: 24,
+              }}
+          >
+            Edit Profile
+          </Text>
+
+          <TextInput
+              value={userProfile.name}
+              onChangeText={(text) =>
+                  setUserProfile({
+                    ...userProfile,
+                    name: text,
+                  })
+              }
+              placeholder="Name"
+              style={styles.input}
+          />
+
+          <TextInput
+              value={userProfile.subject}
+              onChangeText={(text) =>
+                  setUserProfile({
+                    ...userProfile,
+                    subject: text,
+                  })
+              }
+              placeholder="Subject"
+              style={styles.input}
+          />
+
+          <TextInput
+              value={userProfile.bio}
+              onChangeText={(text) =>
+                  setUserProfile({
+                    ...userProfile,
+                    bio: text,
+                  })
+              }
+              placeholder="Bio"
+              multiline
+              style={[styles.input, { height: 100 }]}
+          />
+
+          <TextInput
+              value={userProfile.email}
+              onChangeText={(text) =>
+                  setUserProfile({
+                    ...userProfile,
+                    email: text,
+                  })
+              }
+              placeholder="Email"
+              style={styles.input}
+          />
+
+          <TextInput
+              value={userProfile.university}
+              onChangeText={(text) =>
+                  setUserProfile({
+                    ...userProfile,
+                    university: text,
+                  })
+              }
+              placeholder="University"
+              style={styles.input}
+          />
+
+          <TextInput
+              value={interestsInput}
+              onChangeText={setInterestsInput}
+              placeholder="Interests"
+              style={styles.input}
+          />
+
+          <TouchableOpacity
+              style={styles.settingsButton}
+              onPress={() => {
+                setUserProfile({
+                  ...userProfile,
+                  interests: interestsInput
+                      .split(',')
+                      .map((interest) => interest.trim())
+                      .filter(Boolean),
+                });
+
+                setIsEditing(false);
+              }}
+          >
+            <Text style={styles.settingsText}>
+              Save Changes
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       {/* Extra bottom spacing for tab navigation */}
       <View style={{ height: 120 }} />
     </ScrollView>
@@ -202,6 +331,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     paddingHorizontal: 20,
+  },
+
+  input: {
+    backgroundColor: COLORS.card,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    color: COLORS.text,
+
+    ...SHADOWS.card,
   },
 
   title: {
